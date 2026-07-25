@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Interconnect Premium | Richard Trevor</title>
-<meta name="description" content="What AI hardware pricing assumes about where training lives: the all-reduce arithmetic, the method spectrum, the multi-site record, and pre-registered kill criteria. As of 2026-07-25.">
+<meta name="description" content="What AI hardware pricing assumes about where training lives: the all-reduce arithmetic, the method spectrum, the multi-site record and pre-registered kill criteria. As of 2026-07-25.">
 <meta property="og:title" content="The Interconnect Premium">
-<meta property="og:description" content="Under an unsharded data-parallel assumption, synchronous gradient training exits a 400 Gb/s port at 62.5B parameters. The full argument, caveats, and pre-registered kill criteria.">
+<meta property="og:description" content="Under an unsharded data-parallel assumption, synchronous gradient training exits a 400 Gb/s port at 62.5B parameters. The full argument, caveats and pre-registered kill criteria.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://richtrv.github.io/interconnect/">
 <meta property="og:image" content="https://richtrv.github.io/interconnect/assets/og.png">
@@ -175,7 +175,7 @@
     private fibre. Owned, provisioned, exclusive links extend the radius of one building without changing
     its cost of entry, so they carry no evidence about commodity links. The exhibit separates the two
     records by marker for that reason.</p>
-    <p>The gap is the number to hold. In mid 2024 the commodity-link record stood roughly 500 times below
+    <p>The gap is the number to track. In mid 2024 the commodity-link record stood roughly 500 times below
     the largest documented single-campus dense run, PaLM at 540B. By 2025 the gap was about 17 times.
     Two data points set a direction; criterion 2 states the crossing that would settle it. Each crossing
     on the way converts standalone fleets from stranded capacity into competing supply, and useful-life
@@ -191,7 +191,7 @@
     accelerators and Ethernet switching; Micron reported higher HBM demand from AI data centres.<sup class="sn-ref">8</sup>
     <span class="sidenote">8. Sources 15 to 17. These disclosures establish demand for the components;
     they do not measure a standalone interconnect premium.</span>
-    Under Exhibit A's assumptions, capacity behind weaker links cannot hold the five-second step, and
+    Under Exhibit A's assumptions, capacity behind weaker links cannot hold the 5 second step, and
     that constraint is what the premium prices.</p>
     <p>If the premium compresses, the first effects are accounting effects. Standalone and
     prior-generation fleets re-enter the training pool and earn longer, which moves useful-life and
@@ -216,7 +216,7 @@
       <tbody>
         <tr><td class="exposure">The descent stalls (base case)</td>
         <td>The distance record stops closing and the premium series publishes and holds.</td>
-        <td>Nothing. Fabric, attach and short depreciation schedules stay as priced.</td></tr>
+        <td>Nothing; fabric, attach and short depreciation schedules stay as priced.</td></tr>
         <tr><td class="exposure">Low-comm reaches the frontier</td>
         <td>Criterion 2: a documented 100B+ run over 10 Gb/s links within 1.3x matched compute. The early
         warning is criterion 3, published communication factors of 5,000x at 10B+.</td>
