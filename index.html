@@ -55,12 +55,12 @@
   <section class="note-section">
     <h2 class="eyebrow">Abstract</h2>
     <p>A large share of AI hardware value is priced on the assumption that frontier training must happen
-    inside one building. This write-up puts a number on that assumption and watches it. In the unsharded
+    inside one building. This write-up puts a number on that assumption and tracks it. In the unsharded
     data-parallel case the requirement is 0.8 bytes per second per parameter, which exceeds a 400 Gb/s
     port at 62.5B parameters at a 5 second step. Methods that need far less bandwidth already exist at
     published exchange rates: low-communication training cuts the requirement 400 to 500 times for a few
-    points of efficiency; evolutionary methods, used first-hand in the doctoral work behind this page,
-    cut it to bytes and pay 4 to 8 times in samples. The multi-site record over commodity links moved
+    points of efficiency; evolutionary methods cut it to bytes and pay 3 to 10 times in samples. The
+    multi-site record over commodity links moved
     from 1.1B to 32B parameters in under a year, against a single-campus dense frontier of 540B. If that
     trajectory continues, training stops depending on the single large building and the demand mix across
     fabric, optics, memory and merchant silicon shifts with it. A daily marketplace collector tracks a
@@ -83,7 +83,7 @@
     16M token batch and 16,384 H100s at 400 TFLOPS each imply a 5.9 second step; source 9.</span>
     That demands 56 GB/s of sustained interconnect per worker, which is more than a 400 Gb/s InfiniBand
     port can deliver at line rate. Modelled this way, a 70B run has already outgrown building-scale
-    networking; it wants rack fabric. The general form is required bandwidth = 0.8 bytes per second per parameter, and the
+    networking and requires a scale-up link. The general form is required bandwidth = 0.8 bytes per second per parameter, and the
     illustrative crossings follow: consumer fibre by 160M parameters, campus ethernet by 15.6B, a
     400 Gb/s port by 62.5B, and an NVLink-class link by 1.1T.<sup class="sn-ref">3</sup>
     <span class="sidenote">3. A worker in Exhibit A is one data-parallel rank holding a full replica.
@@ -97,7 +97,7 @@
     <p>This is one physical basis of scale-up fabric, co-packaged optics and rack-scale system value. HBM
     addresses a separate local-memory bottleneck, though it is sold inside many of the same systems. The
     unsharded bound takes three constants and a division to compute; the sharded case distributes that
-    traffic but introduces other communication. An assumption this explicit is also testable, and the
+    traffic but introduces other communication. Either way the assumption is stated in numbers, and the
     sections below test it.</p>
     <div class="chart-wrap">
       <div id="exhibit-a-mini" class="screen-chart" role="img" aria-label="Static rendering of the Bandwidth Wall chart: required per-worker bandwidth against model size for the three method families."></div>
@@ -122,21 +122,21 @@
     <span class="sidenote">4. DiLoCo, source 1; Streaming DiLoCo adds overlap and 4-bit quantisation,
     source 2; INTELLECT-1 technical report, source 4.</span>
     The exchange rate is explicit: orders of magnitude less bandwidth, a few points of efficiency, more
-    total compute for equal loss. That exchange rate is where fabric pricing power lives: every order of
+    total compute for equal loss. Fabric pricing power rests on that exchange rate: every order of
     magnitude conceded moves training capacity from inside the building to outside it.</p>
     <p>Evolutionary and population-based methods hold the far end of the curve. Workers perturb parameters
     under shared random seeds, evaluate, and exchange scalar fitness values: a few bytes per worker per
-    generation, independent of model size. The published price is sample inefficiency, and it was
-    measured on reinforcement-learning tasks, not language pretraining.<sup class="sn-ref">5</sup>
+    generation, independent of model size. The published price is sample inefficiency: 3 to 10 times the
+    data of a gradient baseline, measured on reinforcement-learning tasks rather than language
+    pretraining.<sup class="sn-ref">5</sup>
     <span class="sidenote">5. Salimans et al., 2017, source 6: evolution strategies scaled to over a
     thousand workers with bytes-per-generation communication.</span></p>
-    <p>A year of doctoral work on population-based training of neural networks sits behind that last
-    claim: heterogeneous machines, no shared fabric, workers exchanging a few bytes of fitness per
-    generation. Communication was never the constraint. Compute always was. Against a tuned gradient
-    baseline I observed a sample penalty of four to eight times, and that penalty is why these methods
-    lose at frontier scale, not the network. The consequence for the demand mix is specific: if the
-    sample gap closes, compute demand rises while co-location demand falls, the one state where
-    accelerators and fabric decouple.</p>
+    <p>The deployment profile follows from the arithmetic: heterogeneous machines, no shared fabric,
+    workers exchanging a few bytes of fitness per generation, and compute rather than communication as
+    the binding constraint. The sample penalty, not the network, is why these methods lose at frontier
+    scale on current evidence. The consequence for the demand mix is specific: if the sample gap closes,
+    compute demand rises while co-location demand falls, the one state where accelerators and fabric
+    decouple.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
@@ -159,7 +159,7 @@
     n=11; whole 8+ GPU NVLink nodes median $3.09, n=3. The clustered side is below the stated minimum.
     Stored in data/premium.json; v2 begins with subsequent pulls.</span>
     The series is collecting rather than publishing: the book is not yet deep enough to clear the stated
-    minimum, and the rule does not bend for thin days.</p>
+    minimum, and days below it are stored as invalid rather than plotted.</p>
   </section>
 
   <section class="note-section">
@@ -179,7 +179,7 @@
     the largest documented single-campus dense run, PaLM at 540B. By 2025 the gap was about 17 times.
     Two data points set a direction; criterion 2 states the crossing that would settle it. Each crossing
     on the way converts standalone fleets from stranded capacity into competing supply, and useful-life
-    assumptions are where that shows first.</p>
+    assumptions register it first.</p>
   </section>
 
   <section class="note-section">
@@ -207,8 +207,8 @@
 
   <section class="note-section">
     <h2 class="eyebrow">States and Triggers</h2>
-    <p>Positioning needs states rather than a single view. Each state below has an observable trigger,
-    and the triggers arrive in a known order.</p>
+    <p>Four states cover the outcomes. Each has an observable trigger, and the triggers arrive in a
+    known order.</p>
     <table class="scenario">
       <thead>
         <tr><th scope="col">State</th><th scope="col">Trigger to watch</th><th scope="col">What re-rates first</th></tr>
@@ -223,20 +223,20 @@
         <td>Useful lives and depreciation inside hyperscaler accounts, then networking attach, then the
         system-versus-merchant mix.</td></tr>
         <tr><td class="exposure">Evolutionary methods close the sample gap</td>
-        <td>Published parity within 2x samples of a gradient baseline at 10B+ scale, against the 4 to 8x
-        observed today.</td>
+        <td>Published parity within 2x samples of a gradient baseline at 10B+ scale, against the 3 to
+        10x published today.</td>
         <td>Fabric compresses hardest while total compute demand rises; merchant and distributed capacity
         accrue.</td></tr>
-        <tr><td class="exposure">The spread confirms</td>
+        <tr><td class="exposure">The rental spread compresses</td>
         <td>Criterion 1: the rental spread under 5 points for two consecutive quarters.</td>
         <td>Confirmation rather than warning; by this point the re-rating is under way.</td></tr>
       </tbody>
     </table>
-    <p>The order is the useful part. Communication-reduction factors print in papers quarters before
-    anyone demonstrates a frontier-scale run; accounting changes follow within a reporting cycle or two;
-    attach rates and the rental spread move last, because marketplaces price bundles and filings lag
-    decisions. The leading indicators are public and free: the arXiv record and the useful-life notes in
-    annual filings. The spread confirms. It does not warn.</p>
+    <p>Communication-reduction factors appear in papers quarters before a frontier-scale run is
+    demonstrated; accounting changes follow within a reporting cycle or two; attach rates and the rental
+    spread move last, because marketplaces price bundles and filings lag decisions. The leading
+    indicators are public: the arXiv record and the useful-life notes in annual filings. The rental
+    spread is a confirming indicator rather than a leading one.</p>
   </section>
 
   <section class="note-section">
@@ -247,7 +247,7 @@
     <p>The bandwidth exhibit assumes stated precisions, step times and synchronisation schemes. Different
     choices shift the lines by constant factors; they do not change the ordering of the three families or
     the existence of the wall.</p>
-    <p>Evolutionary methods' sample inefficiency is well documented and observed first-hand. No claim is
+    <p>Evolutionary methods' sample inefficiency is well documented. No claim is
     made that they displace gradient training at frontier scale on current evidence; they define the
     floor of the communication-cost curve, not the frontier of efficiency.</p>
     <p>Frontier multi-datacentre training on private fibre is not evidence for commodity-link training.
