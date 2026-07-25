@@ -1,0 +1,52 @@
+section,item,value,unit,source,note
+constants,bytes_per_parameter,2,bytes,standard bf16 mixed-precision training,gradients exchanged at 2 bytes per parameter
+constants,allreduce_volume_factor,2,x model bytes per worker per step,Patarasuk and Yuan 2009 (bandwidth-optimal ring all-reduce),ring all-reduce moves 2(N-1)/N of the buffer per worker; approximated as 2
+constants,target_step_time,5,seconds,derived from arXiv 2407.21783,Llama 3.1 405B: 6 FLOPs per parameter-token x 16M token batch / (16384 H100 x 400 TFLOPS) = 5.9 s; stated target rounded to 5
+constants,diloco_local_steps,500,inner steps between syncs,arXiv 2311.08105,DiLoCo H=500; communication reduced by the same factor
+constants,evolutionary_population,1024,workers,constructed scenario anchored to arXiv 1703.03864,Salimans et al. demonstrated more than 1000 workers; 1024 is the exhibit scenario
+constants,evolutionary_bytes_per_member,8,bytes per generation,constructed scenario anchored to arXiv 1703.03864,one 64-bit scalar return per worker under shared random seeds
+constants,evolutionary_sample_inefficiency,4 to 8,x gradient-baseline samples,arXiv 1703.03864 and author's own population-based training,Salimans et al. report 3 to 10x more data on Atari; 4 to 8 is the author's observed range from doctoral population-based training and remains anecdotal
+formulas,gradient_required_bandwidth,0.8 x P,bytes per second,allreduce_volume_factor x bytes_per_parameter x P / target_step_time,P is parameter count; pure case where one data-parallel rank holds a full unsharded replica
+formulas,lowcomm_required_bandwidth,0.0016 x P,bytes per second,gradient_required_bandwidth / diloco_local_steps,pseudo-gradient sync amortised over 500 local steps
+formulas,evolutionary_required_bandwidth,1638,bytes per second,evolutionary_population x evolutionary_bytes_per_member / target_step_time,independent of parameter count
+link_classes,nvlink,9.0E+11,bytes per second,NVIDIA H100 specifications (nvidia.com),NVLink 4: 900 GB/s per GPU; scale-up fabric within one rack
+link_classes,infiniband,5.0E+10,bytes per second,NVIDIA Quantum-2 NDR,400 Gb/s per port; building-scale scale-out fabric
+link_classes,ethernet_datacentre,1.25E+10,bytes per second,IEEE 802.3 100GbE,100 Gb/s; campus-scale commodity networking
+link_classes,wan_leased,1.25E+9,bytes per second,typical leased inter-region wavelength,10 Gb/s; verdict boundary for CROSS-REGION; not drawn as a chart band
+link_classes,home_fibre,1.25E+8,bytes per second,typical FTTP tier,1 Gb/s; the ANYWHERE boundary
+crossovers,gradient_exits_home_fibre,0.16,billion parameters,computed from formulas above,synchronous gradient training leaves consumer links below 1B
+crossovers,gradient_exits_wan_leased,1.6,billion parameters,computed,exits 10 Gb/s leased links
+crossovers,gradient_exits_ethernet_datacentre,15.6,billion parameters,computed,exits 100 Gb/s campus ethernet
+crossovers,gradient_exits_infiniband,62.5,billion parameters,computed,illustrative unsharded data-parallel bound at a 5 second step; not a universal frontier ceiling
+crossovers,gradient_exits_nvlink,1125,billion parameters,computed,even NVLink class exhausts just past 1T at a 5 s step
+crossovers,lowcomm_exits_home_fibre,78,billion parameters,computed,DiLoCo-class methods hold consumer links to 78B
+crossovers,lowcomm_exits_wan_leased,781,billion parameters,computed,DiLoCo-class methods hold 10 Gb/s links to 781B
+sanity,intellect1_implied_bandwidth,128,megabits per second at 10B,computed vs arXiv 2412.01152,model predicts 10B low-comm training fits consumer links; INTELLECT-1 trained 10B across 3 continents
+sanity,llama_3_405b_sharded_gradient_sync,2.1,GB/s per GPU,computed from arXiv 2407.21783,405B x 2 bytes x ring factor 2 / (TP8 x PP16 x 5.9 seconds); gradient sync only; excludes tensor pipeline context traffic and overhead
+exhibit_c,opendiloco,1.1,billion parameters,arXiv 2407.07852,2024-07; commodity links across 2 continents; solid marker
+exhibit_c,intellect_1,10,billion parameters,arXiv 2412.01152,2024-11; commodity links across 3 continents; solid marker
+exhibit_c,intellect_2,32,billion parameters,arXiv 2505.07291,2025-05; RL post-training over commodity links; solid marker
+exhibit_c,gemini_1_ultra,not disclosed,parameters,arXiv 2312.11805,2023-12; multiple datacentres on private fibre; non-quantitative hollow top-rail marker; not evidence for commodity links
+exhibit_c_reference,gpt_3,175,billion parameters,arXiv 2005.14165,2020-05; single-campus frontier reference
+exhibit_c_reference,palm,540,billion parameters,arXiv 2204.02311,2022-04; single-campus frontier reference
+exhibit_c_reference,llama_3_405b,405,billion parameters,arXiv 2407.21783,2024-07; single-campus frontier reference
+comm_reduction,diloco,500,x versus synchronous data-parallel,arXiv 2311.08105,baseline for kill criterion 3
+comm_reduction,intellect_1,400,x versus synchronous data-parallel,arXiv 2412.01152,int8 pseudo-gradients with local steps
+comm_reduction,streaming_diloco,400,x versus synchronous data-parallel,arXiv 2501.18512,overlapped sync with 4-bit quantisation
+premium_series,methodology_version,v2,version,scripts/pull_premium.py,starts after the stored 2026-07-25 v1 observation; no valid v1 day exists
+premium_series,universe,Vast.ai public search API,rentable verified asks,https://docs.vast.ai/api-reference/search/search-offers,H100 SXM 80GB only; explicit 1000-offer limit with a fail-closed truncation guard
+premium_series,clustered_side,num_gpus >= 8 and gpu_frac >= 0.99 and nvlink reported,filter,scripts/pull_premium.py,whole 8+ GPU NVLink node asks; missing or invalid gpu_frac is rejected
+premium_series,standalone_side,num_gpus = 1,filter,scripts/pull_premium.py,single-GPU asks; gpu_frac is a share of host-machine resources and is not a fractional-GPU test on this side
+premium_series,observation_unit,one median price per unique machine_id,host-level aggregation,scripts/pull_premium.py,multiple qualifying asks on one machine are collapsed to their within-machine median before side aggregation
+premium_series,price_basis,median total ask per GPU-hour per unique machine,USD,scripts/pull_premium.py,dph_total / num_gpus; a bundle-price proxy rather than a pure fabric price
+premium_series,trim_rule,drop asks outside 0.5x to 2.0x of side median,filter,scripts/pull_premium.py,guards against troll listings
+premium_series,minimum_count,5 unique machines per side after trim,threshold,scripts/pull_premium.py,days below minimum are stored but marked invalid and never plotted
+premium_series,stored_v1_pull,2026-07-25T19:46:13Z: standalone n=11 median 2.8804; clustered n=3 median 3.0938; day invalid,USD per GPU-hour,data/premium.json,stored v1 observation before unique-machine aggregation; clustered side below minimum
+demand_evidence,nvidia_data_center_networking_growth,142,percent year on year,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm,NVIDIA fiscal 2026; driven by NVLink compute fabric plus Ethernet and InfiniBand growth
+demand_evidence,broadcom_ai_networking_mix,custom accelerators and Ethernet switches,reported AI semiconductor demand,https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm,Broadcom fiscal 2025 filing identifies both categories; does not isolate a networking premium
+demand_evidence,micron_hbm_demand,HBM demand increased with AI data-centre demand,qualitative,https://www.sec.gov/Archives/edgar/data/723125/000072312525000028/mu-20250828.htm,Micron fiscal 2025 filing; establishes component demand rather than an interconnect premium
+accounting_evidence,microsoft_server_network_life,4 to 6,years,https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm,change assessed July 2022 and effective fiscal 2023
+accounting_evidence,amazon_server_life,5 to 6 then subset to 5,years,https://www.sec.gov/Archives/edgar/data/1018724/000101872425000004/amzn-20241231.htm,extended effective 2024; subset shortened and accelerated retirements effective 2025 due to the pace of AI and machine-learning development
+kill_criteria,criterion_1,spread under 5 points for two consecutive quarters,percentage points,pre-registered 2026-07-25,absent a supply-side explanation; requires the premium series to publish first
+kill_criteria,criterion_2,documented run at 100B+ over links of 10 Gb/s or less within 1.3x matched co-located compute,thresholds,pre-registered 2026-07-25,both numbers fixed before launch
+kill_criteria,criterion_3,documented communication reduction of 5000x or more at 10B+ scale,threshold,pre-registered 2026-07-25,one order of magnitude beyond the current 400 to 500x

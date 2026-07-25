@@ -1,0 +1,25 @@
+{
+ "meta": {
+  "schema_version": 2,
+  "series": "interconnect premium, Vast.ai H100 SXM 80GB",
+  "current_methodology_version": "v2",
+  "construction": "median verified total ask per GPU-hour, whole 8+ GPU NVLink nodes versus single-GPU asks, one observation per unique machine",
+  "trim": "machine observations outside 0.5x to 2.0x of side median dropped",
+  "min_count_per_side": 5,
+  "collection_began": "2026-07-25",
+  "last_pull_utc": "2026-07-25T19:46:13Z"
+ },
+ "days": [
+  {
+   "date": "2026-07-25",
+   "methodology_version": "v1",
+   "standalone_median": 2.8804,
+   "clustered_median": 3.0938,
+   "standalone_n": 11,
+   "clustered_n": 3,
+   "spread_pct": null,
+   "valid": false,
+   "reason": "below minimum count: clustered_n 3"
+  }
+ ]
+}

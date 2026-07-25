@@ -1,0 +1,20 @@
+{
+  "offers": [
+    {"machine_id": 101, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.0, "bw_nvlink": 0},
+    {"machine_id": 101, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.2, "bw_nvlink": 0},
+    {"machine_id": 102, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.2, "bw_nvlink": 0},
+    {"machine_id": 103, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.4, "bw_nvlink": 0},
+    {"machine_id": 104, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.6, "bw_nvlink": 0},
+    {"machine_id": 105, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 2.8, "bw_nvlink": 0},
+
+    {"machine_id": 201, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 24.0, "bw_nvlink": 900},
+    {"machine_id": 201, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 25.6, "bw_nvlink": 900},
+    {"machine_id": 202, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 25.6, "bw_nvlink": 900},
+    {"machine_id": 203, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 27.2, "bw_nvlink": 900},
+    {"machine_id": 204, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 28.8, "bw_nvlink": 900},
+    {"machine_id": 205, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "gpu_frac": 1.0, "dph_total": 30.4, "bw_nvlink": 900},
+
+    {"machine_id": 301, "verification": "verified", "gpu_ram": 80000, "num_gpus": 1, "gpu_frac": 1.0, "dph_total": 0, "bw_nvlink": 0},
+    {"machine_id": 302, "verification": "verified", "gpu_ram": 80000, "num_gpus": 8, "dph_total": 20.0, "bw_nvlink": 900}
+  ]
+}

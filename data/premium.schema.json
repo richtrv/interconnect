@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://richtrv.github.io/interconnect/data/premium.schema.json",
+  "title": "Interconnect premium daily aggregates",
+  "type": "object",
+  "required": ["meta", "days"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "series",
+        "current_methodology_version",
+        "construction",
+        "trim",
+        "min_count_per_side",
+        "collection_began",
+        "last_pull_utc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {"const": 2},
+        "series": {"type": "string"},
+        "current_methodology_version": {"const": "v2"},
+        "construction": {"type": "string"},
+        "trim": {"type": "string"},
+        "min_count_per_side": {"type": "integer", "minimum": 1},
+        "collection_began": {"type": "string", "format": "date"},
+        "last_pull_utc": {"type": "string", "format": "date-time"}
+      }
+    },
+    "days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "date",
+          "methodology_version",
+          "standalone_median",
+          "clustered_median",
+          "standalone_n",
+          "clustered_n",
+          "spread_pct",
+          "valid"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "date": {"type": "string", "format": "date"},
+          "methodology_version": {"type": "string", "enum": ["v1", "v2"]},
+          "standalone_median": {"type": ["number", "null"], "minimum": 0},
+          "clustered_median": {"type": ["number", "null"], "minimum": 0},
+          "standalone_n": {"type": "integer", "minimum": 0},
+          "clustered_n": {"type": "integer", "minimum": 0},
+          "spread_pct": {"type": ["number", "null"]},
+          "valid": {"type": "boolean"},
+          "reason": {"type": "string"},
+          "provenance": {
+            "type": "object",
+            "required": [
+              "raw_offer_n",
+              "schema_valid_offer_n",
+              "usable_offer_n",
+              "standalone_offer_n",
+              "clustered_offer_n",
+              "standalone_machine_n_pretrim",
+              "clustered_machine_n_pretrim",
+              "query_limit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "raw_offer_n": {"type": "integer", "minimum": 0},
+              "schema_valid_offer_n": {"type": "integer", "minimum": 0},
+              "usable_offer_n": {"type": "integer", "minimum": 0},
+              "standalone_offer_n": {"type": "integer", "minimum": 0},
+              "clustered_offer_n": {"type": "integer", "minimum": 0},
+              "standalone_machine_n_pretrim": {"type": "integer", "minimum": 0},
+              "clustered_machine_n_pretrim": {"type": "integer", "minimum": 0},
+              "query_limit": {"type": "integer", "minimum": 1}
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "methodology_version": {"const": "v2"}
+              }
+            },
+            "then": {
+              "required": ["provenance"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

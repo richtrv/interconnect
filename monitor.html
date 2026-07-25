@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Interconnect Premium: Monitor | Richard Trevor</title>
+<meta name="description" content="Under an unsharded data-parallel assumption, synchronous gradient training exits a 400 Gb/s port at 62.5B parameters. A live monitor of the bandwidth assumption under AI hardware value.">
+<meta property="og:title" content="The Interconnect Premium: Monitor">
+<meta property="og:description" content="Under an unsharded data-parallel assumption, synchronous gradient training exits a 400 Gb/s port at 62.5B parameters. A live monitor of the bandwidth assumption under AI hardware value.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://richtrv.github.io/interconnect/monitor.html">
+<meta property="og:image" content="https://richtrv.github.io/interconnect/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="app.js" defer></script>
+<!-- Analytics: create a GoatCounter account, set the code below, then uncomment.
+<script data-goatcounter="https://CODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+-->
+</head>
+<body>
+
+<div class="strip">
+  <div class="container">
+    <span><span class="k">BANDWIDTH WALL</span> <span class="headline-v" id="strip-headline">62.5B</span></span>
+    <span id="strip-date"><span class="k">DATA THROUGH</span> <span class="v">2026-07-25</span></span>
+    <span class="who hide-m"><span class="v">RICHARD TREVOR</span> <span class="k">/</span> <a href="mailto:richardgt2001@gmail.com">richardgt2001@gmail.com</a></span>
+  </div>
+</div>
+
+<header class="container">
+  <div class="masthead">
+    <h1>The Interconnect Premium</h1>
+    <div class="side">
+      <div class="name">RICHARD TREVOR</div>
+      <div><a href="mailto:richardgt2001@gmail.com">richardgt2001@gmail.com</a></div>
+      <div>AS OF 2026-07-25</div>
+    </div>
+  </div>
+  <nav class="site">
+    <a href="monitor.html" class="active" aria-current="page">Monitor</a>
+    <a href="index.html">Write-up</a>
+    <a href="methodology.csv">Methodology</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <div class="lede prose">
+    <p>A large share of AI hardware value rests on one assumption: frontier training stays inside a single
+    building. The assumption is a bandwidth requirement. Exhibit A computes it for the unsharded
+    data-parallel case, and a known family of methods attacks it at published exchange rates. This page
+    prices the assumption as well as a public market allows and states, in advance, what would falsify
+    it. The write-up carries the full argument.</p>
+  </div>
+
+  <div class="headline">
+    <div class="figure" id="headline-figure">62.5B</div>
+    <div class="defline">PARAMETERS AT WHICH ONE UNSHARDED DATA-PARALLEL REPLICA EXCEEDS A 400 Gb/s PORT
+    AT A 5 S STEP. ILLUSTRATIVE BOUND; SHARDING CHANGES PER-DEVICE TRAFFIC. WINDOW 1B TO 1T. AS OF
+    2026-07-25.</div>
+  </div>
+
+  <section class="block">
+    <div class="eyebrow">Exhibit A</div>
+    <h2 class="exhibit">The Bandwidth Wall</h2>
+    <p class="prose">Each line is the bandwidth one worker needs to hold a 5 second step as model size
+    grows. Where a line leaves a band, that method has outgrown that class of link.</p>
+    <div class="chart-wrap">
+      <div id="exhibit-a" class="screen-chart" role="img" aria-label="Log-log chart: required per-worker bandwidth rises in proportion to model size for synchronous gradient training, sits 500 times lower for low-communication methods, and stays flat at kilobytes per second for evolutionary methods."></div>
+      <img class="print-only" src="assets/exhibit-a.png" alt="The Bandwidth Wall chart, static rendering.">
+      <div class="chart-readout" id="a-readout"></div>
+    </div>
+    <div class="source-line">Source: methodology.csv; arXiv 2311.08105, 1703.03864, 2407.21783.
+    Evolutionary line is a constructed scenario: 1,024 workers x 8 bytes every 5 seconds. Data through
+    2026-07-25.</div>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow">The Panel</div>
+    <h2 class="exhibit">Where can this run</h2>
+    <div class="panel" id="panel">
+      <div class="methods" role="group" aria-label="Training method">
+        <button data-method="gradient" aria-pressed="true">Gradient</button>
+        <button data-method="lowcomm" aria-pressed="false">Low-comm</button>
+        <button data-method="evolution" aria-pressed="false">Evolutionary</button>
+      </div>
+      <div class="sizer">
+        <label for="panel-size">Model size</label>
+        <input type="range" id="panel-size" min="0" max="3" step="0.005" value="1.845"
+          aria-label="Model size, 1 billion to 1 trillion parameters, logarithmic"
+          aria-valuetext="70 billion parameters">
+        <span class="size-readout" id="panel-size-readout">70B</span>
+      </div>
+      <div class="verdict" id="panel-verdict" aria-live="polite">ONE RACK</div>
+      <div class="verdict-detail" id="panel-verdict-detail"></div>
+      <div class="caption">Same arithmetic as the chart above. Constants in the methodology file.</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="eyebrow">The Premium, Collecting</h2>
+    <p class="prose">Rental marketplaces price the same accelerator differently depending on the machine
+    around it. The collector compares single-GPU asks with whole 8+ GPU NVLink nodes, holding the
+    accelerator fixed; the spread is a daily proxy for what the fabric adds, and it carries host, region
+    and bundle effects a proxy cannot remove. The first pull found the whole-node side too thin to
+    publish, so the collector runs daily until both sides clear the stated minimums.</p>
+    <div class="premium-status" id="premium-status"></div>
+    <div class="source-line">Source: Vast.ai public listings, H100 SXM 80GB, verified asks, one observation
+    per unique machine, 0.5x to 2.0x trim, minimum 5 machines per side. Daily aggregates only; individual
+    listings are never republished.</div>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow">Exhibit B</div>
+    <h2 class="exhibit">The Distance Record</h2>
+    <p class="prose">The largest documented multi-site training runs, against the largest documented
+    single-campus dense run.</p>
+    <div class="chart-wrap">
+      <div id="exhibit-c" class="screen-chart" role="img" aria-label="Scatter chart: multi-site training runs over commodity links have grown from 1.1 billion parameters in mid 2024 to 32 billion in 2025, against a single-campus dense frontier of 540 billion. Gemini multi-site training is annotated separately because its parameter count was not disclosed."></div>
+      <img class="print-only" src="assets/exhibit-c.png" alt="The Distance Record chart, static rendering.">
+      <div class="chart-tip" id="c-tip"></div>
+    </div>
+    <div class="source-line">Source: methodology.csv; arXiv 2407.07852, 2412.01152, 2505.07291,
+    2312.11805. Gemini size not disclosed; shown on a non-quantitative top rail. Solid: commodity links.
+    Hollow: private fibre. Data through 2026-07-25.</div>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow">Demand Mix</div>
+    <h2 class="exhibit">The Scenario Table</h2>
+    <p class="prose">Demand exposure under each state of the premium. Directions, not names.</p>
+    <div class="scenario-controls" role="group" aria-label="Scenario">
+      <button data-state="holds" aria-pressed="true">Premium holds</button>
+      <button data-state="compresses" aria-pressed="false">Premium compresses</button>
+    </div>
+    <table class="scenario">
+      <thead>
+        <tr><th scope="col">Exposure</th><th scope="col">Reading</th><th scope="col">Why</th></tr>
+      </thead>
+      <tbody id="scenario-body"></tbody>
+    </table>
+  </section>
+
+  <section class="block kill">
+    <h2 class="eyebrow">What Would Kill This</h2>
+    <ol>
+      <li><span class="idx">1</span><span class="crit">Premium series below 5 points for two consecutive
+      quarters, absent a supply explanation.</span><span class="chip" id="chip-1">COLLECTING</span></li>
+      <li><span class="idx">2</span><span class="crit">A documented run at 100B+ parameters over links of
+      10 Gb/s or less, within 1.3x matched co-located compute.</span><span class="chip" id="chip-2">WATCHING</span></li>
+      <li><span class="idx">3</span><span class="crit">Documented communication reduction reaches 5000x at
+      10B+ scale.</span><span class="chip" id="chip-3">WATCHING</span></li>
+    </ol>
+    <p class="close-line prose">Any trigger produces a written update to this page. This is the monitor
+    I would run.</p>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="container">RICHARD TREVOR / <a href="mailto:richardgt2001@gmail.com">richardgt2001@gmail.com</a> /
+  <a href="methodology.csv">METHODOLOGY.CSV</a> / <a href="https://github.com/richtrv/interconnect">REPO</a> /
+  Data refreshes daily. Collection began 2026-07-25.</div>
+</footer>
+
+</body>
+</html>
