@@ -130,17 +130,13 @@
     reinforcement-learning methods it was compared against on reasoning tasks, needing only forward
     passes, with fewer reward hacks and steadier runs, and zeroth-order fine-tuning has separately
     reached 66B parameters on inference-class memory.</p>
-    <p>My dissertation used these methods, so the sample penalty is something I have measured rather
-    than read about. The work ran on a single machine, nothing distributed about it, and against a tuned
-    gradient baseline the penalty came out at 4 to 8 times, inside the published range. What makes the
-    method matter here is a property I did not need and did not test: members of a population only have
-    to share a fitness number, so scaling out costs bytes wherever the workers sit. My read on the
-    published range: solid where it was measured, on reinforcement-learning benchmarks at the scales
-    research budgets reach, but I suspect part of the gap is research attention rather than method.
-    Gradient training has had a decade of optimiser and infrastructure engineering behind it,
-    evolutionary methods have not, and nobody has funded the equivalent effort to find where the floor
-    actually is. The September 2025 result above is the first funded attempt, and it points the
-    direction I expected. One result, one regime, so still a suspicion rather than a conclusion.</p>
+    <p>My read on the situation, having used evolutionary search for my dissertation: the published
+    penalty is solid where it was measured, on reinforcement-learning benchmarks at the scales research
+    budgets reach, but I suspect part of the gap is research attention rather than method. Gradient training has had a decade of optimiser and
+    infrastructure engineering behind it, evolutionary methods have not, and nobody has funded the
+    equivalent effort to find where the floor actually is. The September 2025 result is the first funded
+    attempt, and it points the direction I expected. One result, one regime, so still a suspicion rather
+    than a conclusion.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
