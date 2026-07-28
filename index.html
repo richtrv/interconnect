@@ -125,15 +125,16 @@
     pretraining.<sup class="sn-ref">5</sup>
     <span class="sidenote">5. Salimans et al., 2017, source 6: evolution strategies scaled to over a
     thousand workers with bytes-per-generation communication.</span></p>
-    <p>My dissertation used these methods, so the far end of the curve is the part I have run rather
-    than read about. A year of population-based training across heterogeneous machines with no shared
-    fabric, workers exchanging a few bytes of fitness per generation. Communication never bound anything,
-    compute did. Against a tuned gradient baseline I saw a sample penalty of 4 to 8 times, inside the
-    published range. My read on that range: solid where it was measured, on reinforcement-learning
-    benchmarks at the scales research budgets reach, but I suspect part of the gap is research attention
-    rather than method. Gradient training has had a decade of optimiser and infrastructure engineering
-    behind it, evolutionary methods have not, and nobody has funded the equivalent effort to find where
-    the floor actually is. That is a suspicion, not a result.</p>
+    <p>My dissertation used these methods, so the sample penalty is something I have measured rather
+    than read about. The work ran on a single machine, nothing distributed about it, and against a tuned
+    gradient baseline the penalty came out at 4 to 8 times, inside the published range. What makes the
+    method matter here is a property I did not need and did not test: members of a population only have
+    to share a fitness number, so scaling out costs bytes wherever the workers sit. My read on the
+    published range: solid where it was measured, on reinforcement-learning benchmarks at the scales
+    research budgets reach, but I suspect part of the gap is research attention rather than method.
+    Gradient training has had a decade of optimiser and infrastructure engineering behind it,
+    evolutionary methods have not, and nobody has funded the equivalent effort to find where the floor
+    actually is. That is a suspicion, not a result.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
