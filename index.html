@@ -55,14 +55,14 @@
   <section class="note-section">
     <h2 class="eyebrow">Abstract</h2>
     <p>A large share of AI hardware value is priced on the assumption that frontier training must happen
-    inside one building. In the unsharded data-parallel case the requirement is 0.8 bytes per second per
-    parameter, past a 400 Gb/s port at 62.5B parameters at a 5 second step. Methods that need less
-    bandwidth exist at published exchange rates, and the multi-site record over ordinary links moved from
-    1.1B to 32B parameters in under a year against a single-campus frontier of 540B. Base case: the
-    premium holds. The scenario worth watching is low-communication training reaching frontier scale; the
-    tail, the part I know from my own dissertation work, is evolutionary methods closing their sample
-    gap. Three pre-registered criteria state what would change the base case, a daily collector
-    instruments the first.</p>
+    inside one building, and that assumption is a number, 0.8 bytes per second per parameter in the
+    unsharded data-parallel case, past a 400 Gb/s port at 62.5B parameters at a 5 second step. Methods
+    that need less bandwidth exist at published exchange rates, and the multi-site record over ordinary
+    links moved from 1.1B to 32B parameters in under a year against a single-campus frontier of 540B.
+    Base case: the premium holds. The scenario worth watching is low-communication training reaching
+    frontier scale; the tail, the part I know from my own dissertation, is evolutionary methods closing
+    their sample gap. Three pre-registered criteria state what would change the base case, a daily
+    collector instruments the first.</p>
   </section>
 
   <section class="note-section">
@@ -73,14 +73,14 @@
     exchanged buffer through each worker, every step.<sup class="sn-ref">1</sup>
     <span class="sidenote">1. Ring all-reduce moves 2(N-1)/N of the buffer per worker (Patarasuk and Yuan,
     2009). The factor is taken as 2 throughout; source 14.</span></p>
-    <p>Worked once, at 70B parameters. Gradients in bf16 are 2 bytes per parameter: a 140 GB buffer. The
-    ring moves twice that through each worker: 280 GB per step. Frontier runs step every few seconds; the
-    stated target here is 5 seconds.<sup class="sn-ref">2</sup>
+    <p>Worked once, at 70B parameters: gradients in bf16 are 2 bytes per parameter, a 140 GB buffer, the
+    ring moves twice that through each worker, 280 GB per step, and frontier runs step every few seconds,
+    the stated target here being 5.<sup class="sn-ref">2</sup>
     <span class="sidenote">2. Derived from the Llama 3.1 405B disclosure: 6 FLOPs per parameter-token, a
     16M token batch and 16,384 H100s at 400 TFLOPS each imply a 5.9 second step; source 9.</span>
-    That demands 56 GB/s of sustained interconnect per worker, which is more than a 400 Gb/s InfiniBand
-    port can deliver at line rate. Modelled this way, a 70B run has already outgrown building-scale
-    networking and requires a scale-up link. The general form is required bandwidth = 0.8 bytes per second per parameter, and the
+    That demands 56 GB/s of sustained interconnect per worker, more than a 400 Gb/s InfiniBand port
+    delivers at line rate, so a 70B run modelled this way has already outgrown building-scale
+    networking. The general form is required bandwidth = 0.8 bytes per second per parameter, and the
     illustrative crossings follow: consumer fibre by 160M parameters, campus ethernet by 15.6B, a
     400 Gb/s port by 62.5B, and an NVLink-class link by 1.1T.<sup class="sn-ref">3</sup>
     <span class="sidenote">3. A worker in Exhibit A is one data-parallel rank holding a full replica.
@@ -106,11 +106,9 @@
 
   <section class="note-section">
     <h2 class="eyebrow">The Method Spectrum</h2>
-    <p>Three families of methods sit at three points on the communication-cost curve, each with a stated
-    exchange rate.</p>
     <p>Synchronous gradient training is the efficiency baseline: best use of every sample, full exchange
     every step, communication scaling with model size. Everything above the 100 Gb/s band in the exhibit
-    exists to serve it.</p>
+    exists to serve it, which is another way of saying the premium is priced off this one method.</p>
     <p>Low-communication gradient methods run hundreds of optimiser steps locally and synchronise
     compressed pseudo-gradients at long intervals. DiLoCo demonstrated 500 local steps at a modest quality
     cost; the INTELLECT runs carried the recipe to real distance, training 10B parameters across three
@@ -164,10 +162,10 @@
   <section class="note-section">
     <h2 class="eyebrow">The Distance Record</h2>
     <p>The record that bears on the thesis is the largest model trained across sites over links anyone
-    can buy. OpenDiLoCo took 1.1B parameters across two continents in July 2024. INTELLECT-1 took 10B
-    across three continents that November, on links the arithmetic above says need only about 128 Mb/s
-    per worker. INTELLECT-2 ran 32B in 2025, though as reinforcement-learning post-training, which
-    exchanges far less than pretraining and is labelled accordingly.<sup class="sn-ref">7</sup>
+    can buy, and it has moved quickly: OpenDiLoCo took 1.1B parameters across two continents in July
+    2024, INTELLECT-1 took 10B across three continents that November on links the arithmetic above says
+    need only about 128 Mb/s per worker, and INTELLECT-2 ran 32B in 2025, though as
+    reinforcement-learning post-training, which exchanges far less than pretraining.<sup class="sn-ref">7</sup>
     <span class="sidenote">7. Sources 3, 4, 5. RL post-training moves weights and rollouts occasionally,
     not gradients every step; the 32B point is a weaker claim than the 10B one.</span></p>
     <p>Frontier laboratories also train across datacentres: Gemini was trained across multiple sites on
@@ -182,61 +180,44 @@
   </section>
 
   <section class="note-section">
-    <h2 class="eyebrow">Demand Mix</h2>
-    <p>If the premium holds, value keeps accruing where the bandwidth requirement is met: scale-up fabric,
-    optics and networking attach, HBM intensity, and integrated rack-scale systems rather than merchant
-    parts. NVIDIA reported 142 percent growth in Data Center networking revenue in fiscal 2026, driven by
-    NVLink fabric, Ethernet and InfiniBand; Broadcom attributes its AI semiconductor demand to custom
-    accelerators and Ethernet switching; Micron reported higher HBM demand from AI data centres.<sup class="sn-ref">8</sup>
+    <h2 class="eyebrow">The View</h2>
+    <p>Base case, the premium holds, and while it holds value keeps accruing where the bandwidth
+    requirement is met, which the filings already show: NVIDIA reported 142 percent growth in Data
+    Center networking revenue in fiscal 2026 driven by NVLink fabric, Ethernet and InfiniBand, Broadcom
+    attributes its AI semiconductor demand to custom accelerators and Ethernet switching, and Micron
+    reported higher HBM demand from AI data centres.<sup class="sn-ref">8</sup>
     <span class="sidenote">8. Sources 15 to 17. These disclosures establish demand for the components;
     they do not measure a standalone interconnect premium.</span>
-    Under Exhibit A's assumptions, capacity behind weaker links cannot hold the 5 second step, and
-    that constraint is what the premium prices.</p>
-    <p>If the premium compresses, the first effects are accounting effects. Standalone and
-    prior-generation fleets re-enter the training pool and earn longer, which moves useful-life and
-    depreciation assumptions inside hyperscaler accounts before it moves any headline.<sup class="sn-ref">9</sup>
+    The costs of the alternatives are real, and capacity behind weaker links cannot hold the 5 second
+    step, which is the constraint the premium prices.</p>
+    <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
+    is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
+    in 2025. If it continues to criterion 2 the first effects are accounting effects, because standalone
+    and prior-generation fleets re-enter the training pool and earn longer, which moves useful-life and
+    depreciation assumptions inside hyperscaler accounts before it moves any headline,<sup class="sn-ref">9</sup>
     <span class="sidenote">9. Useful-life estimates have moved both ways. Microsoft extended server and
     network equipment from four to six years in 2022. Amazon extended servers from five to six years in
     2024, then shortened a subset to five years and accelerated retirements effective in 2025, citing the
     pace of AI and machine-learning development. Sources 18 and 19.</span>
-    Networking attach compresses, compute becomes fungible across sites, and the bundle premium of
-    integrated racks shifts back toward merchant silicon. The Monitor's scenario table carries the same
-    rows as directions only; nothing here recommends buying or selling anything.</p>
-  </section>
-
-  <section class="note-section">
-    <h2 class="eyebrow">The View</h2>
-    <p>Base case, the premium holds. The efficiency cost of low-communication training and the sample
-    cost of evolutionary training are both real, and nothing at frontier scale has been trained without
-    co-located fabric doing most of the work.</p>
-    <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
-    is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
-    in 2025. If it continues to criterion 2, the transmission runs through line items before headlines:
-    useful-life and depreciation notes move first (the Microsoft and Amazon changes above show the
-    mechanism), then networking attach, then the system-versus-merchant mix behind NVIDIA's networking
-    line and Broadcom's switching demand. Papers lead demonstrated runs by quarters, accounting follows
-    within a reporting cycle or two, the rental spread moves last because marketplaces price bundles.
-    The filings and the published runs are known, the sequencing is my inference.</p>
+    and only after that networking attach and the bundle premium of integrated racks, which shifts back
+    toward merchant silicon as compute becomes fungible across sites. Papers lead demonstrated runs by
+    quarters, accounting follows within a reporting cycle or two, the rental spread moves last because
+    marketplaces price bundles. The filings and the published runs are known, the sequencing is my
+    inference.</p>
     <p>The tail is evolutionary parity, the scenario I cannot size. If the sample gap closes the
     dislocation is larger: compute demand rises while co-location demand falls, and accelerators
     decouple from fabric. Nothing published points to it, my own results say the penalty is real, and it
-    stays a tail unless the attention gap closes.</p>
+    stays a tail unless the attention gap closes. Nothing here recommends buying or selling
+    anything.</p>
   </section>
 
   <section class="note-section">
     <h2 class="eyebrow">Caveats</h2>
-    <p>The rental spread reflects marketplace composition: who lists, what commitments they carry, and
-    regional mix, not purely interconnect value. It is a proxy tracked consistently under a published
-    filter, not a clean price.</p>
-    <p>The bandwidth exhibit assumes stated precisions, step times and synchronisation schemes. Different
-    choices shift the lines by constant factors; they do not change the ordering of the three families or
-    the existence of the wall.</p>
-    <p>Evolutionary methods' sample inefficiency is well documented. No claim is
-    made that they displace gradient training at frontier scale on current evidence; they define the
-    floor of the communication-cost curve, not the frontier of efficiency.</p>
-    <p>Frontier multi-datacentre training on private fibre is not evidence for commodity-link training.
-    The distance exhibit separates the two by marker, and only the commodity record feeds the kill
-    criteria.</p>
+    <p>The rental spread reflects marketplace composition, who lists, what commitments they carry,
+    regional mix, so it is a proxy tracked consistently under a published filter rather than a clean
+    price, and the bandwidth exhibit assumes stated precisions, step times and synchronisation schemes,
+    where different choices shift the lines by constant factors without changing the ordering of the
+    three families or the existence of the wall.</p>
   </section>
 
   <section class="note-section">
