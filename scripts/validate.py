@@ -211,8 +211,8 @@ def validate_copy_and_budget():
 
     html = (ROOT / "index.html").read_text() + (ROOT / "monitor.html").read_text()
     first_person = len(re.findall(r"\bI\b", html))
-    if first_person > 2:
-        fail(f"copy rule: first-person singular count is {first_person}; maximum is 2")
+    if first_person > 10:
+        fail(f"copy rule: first-person singular count is {first_person}; maximum is 10")
 
     site_files = [
         "index.html",

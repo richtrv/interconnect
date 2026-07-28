@@ -5,7 +5,7 @@ constants,target_step_time,5,seconds,derived from arXiv 2407.21783,Llama 3.1 405
 constants,diloco_local_steps,500,inner steps between syncs,arXiv 2311.08105,DiLoCo H=500; communication reduced by the same factor
 constants,evolutionary_population,1024,workers,constructed scenario anchored to arXiv 1703.03864,Salimans et al. demonstrated more than 1000 workers; 1024 is the exhibit scenario
 constants,evolutionary_bytes_per_member,8,bytes per generation,constructed scenario anchored to arXiv 1703.03864,one 64-bit scalar return per worker under shared random seeds
-constants,evolutionary_sample_inefficiency,3 to 10,x gradient-baseline samples,arXiv 1703.03864,Salimans et al. report 3 to 10x more data than a gradient baseline on Atari; reinforcement learning rather than language pretraining
+constants,evolutionary_sample_inefficiency,3 to 10,x gradient-baseline samples,arXiv 1703.03864,Salimans et al. report 3 to 10x more data than a gradient baseline on Atari; author's dissertation observed 4 to 8x against a tuned gradient baseline
 formulas,gradient_required_bandwidth,0.8 x P,bytes per second,allreduce_volume_factor x bytes_per_parameter x P / target_step_time,P is parameter count; pure case where one data-parallel rank holds a full unsharded replica
 formulas,lowcomm_required_bandwidth,0.0016 x P,bytes per second,gradient_required_bandwidth / diloco_local_steps,pseudo-gradient sync amortised over 500 local steps
 formulas,evolutionary_required_bandwidth,1638,bytes per second,evolutionary_population x evolutionary_bytes_per_member / target_step_time,independent of parameter count

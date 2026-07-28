@@ -55,17 +55,14 @@
   <section class="note-section">
     <h2 class="eyebrow">Abstract</h2>
     <p>A large share of AI hardware value is priced on the assumption that frontier training must happen
-    inside one building. This write-up puts a number on that assumption and tracks it. In the unsharded
-    data-parallel case the requirement is 0.8 bytes per second per parameter, which exceeds a 400 Gb/s
-    port at 62.5B parameters at a 5 second step. Methods that need far less bandwidth already exist at
-    published exchange rates: low-communication training cuts the requirement 400 to 500 times for a few
-    points of efficiency; evolutionary methods cut it to bytes and pay 3 to 10 times in samples. The
-    multi-site record over commodity links moved
-    from 1.1B to 32B parameters in under a year, against a single-campus dense frontier of 540B. If that
-    trajectory continues, training stops depending on the single large building and the demand mix across
-    fabric, optics, memory and merchant silicon shifts with it. A daily marketplace collector tracks a
-    bundle-price proxy for the premium, and three pre-registered criteria state in advance what would
-    falsify the base case that the premium holds.</p>
+    inside one building. In the unsharded data-parallel case the requirement is 0.8 bytes per second per
+    parameter, past a 400 Gb/s port at 62.5B parameters at a 5 second step. Methods that need less
+    bandwidth exist at published exchange rates, and the multi-site record over ordinary links moved from
+    1.1B to 32B parameters in under a year against a single-campus frontier of 540B. Base case: the
+    premium holds. The scenario worth watching is low-communication training reaching frontier scale; the
+    tail, the part I know from my own dissertation work, is evolutionary methods closing their sample
+    gap. Three pre-registered criteria state what would change the base case, a daily collector
+    instruments the first.</p>
   </section>
 
   <section class="note-section">
@@ -97,8 +94,7 @@
     <p>This is one physical basis of scale-up fabric, co-packaged optics and rack-scale system value. HBM
     addresses a separate local-memory bottleneck, though it is sold inside many of the same systems. The
     unsharded bound takes three constants and a division to compute; the sharded case distributes that
-    traffic but introduces other communication. Either way the assumption is stated in numbers, and the
-    sections below test it.</p>
+    traffic but introduces other communication.</p>
     <div class="chart-wrap">
       <div id="exhibit-a-mini" class="screen-chart" role="img" aria-label="Static rendering of the Bandwidth Wall chart: required per-worker bandwidth against model size for the three method families."></div>
       <img class="print-only" src="assets/exhibit-a.png" alt="The Bandwidth Wall chart, static rendering.">
@@ -126,17 +122,20 @@
     magnitude conceded moves training capacity from inside the building to outside it.</p>
     <p>Evolutionary and population-based methods hold the far end of the curve. Workers perturb parameters
     under shared random seeds, evaluate, and exchange scalar fitness values: a few bytes per worker per
-    generation, independent of model size. The published price is sample inefficiency: 3 to 10 times the
+    generation, independent of model size. The published price is sample inefficiency, 3 to 10 times the
     data of a gradient baseline, measured on reinforcement-learning tasks rather than language
     pretraining.<sup class="sn-ref">5</sup>
     <span class="sidenote">5. Salimans et al., 2017, source 6: evolution strategies scaled to over a
     thousand workers with bytes-per-generation communication.</span></p>
-    <p>The deployment profile follows from the arithmetic: heterogeneous machines, no shared fabric,
-    workers exchanging a few bytes of fitness per generation, and compute rather than communication as
-    the binding constraint. The sample penalty, not the network, is why these methods lose at frontier
-    scale on current evidence. The consequence for the demand mix is specific: if the sample gap closes,
-    compute demand rises while co-location demand falls, the one state where accelerators and fabric
-    decouple.</p>
+    <p>My dissertation used these methods, so the far end of the curve is the part I have run rather
+    than read about. A year of population-based training across heterogeneous machines with no shared
+    fabric, workers exchanging a few bytes of fitness per generation. Communication never bound anything,
+    compute did. Against a tuned gradient baseline I saw a sample penalty of 4 to 8 times, inside the
+    published range. My read on that range: solid where it was measured, on reinforcement-learning
+    benchmarks at the scales research budgets reach, but I suspect part of the gap is research attention
+    rather than method. Gradient training has had a decade of optimiser and infrastructure engineering
+    behind it, evolutionary methods have not, and nobody has funded the equivalent effort to find where
+    the floor actually is. That is a suspicion, not a result.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
@@ -206,37 +205,22 @@
   </section>
 
   <section class="note-section">
-    <h2 class="eyebrow">States and Triggers</h2>
-    <p>Four states cover the outcomes. Each has an observable trigger, and the triggers arrive in a
-    known order.</p>
-    <table class="scenario">
-      <thead>
-        <tr><th scope="col">State</th><th scope="col">Trigger to watch</th><th scope="col">What re-rates first</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="exposure">The descent stalls (base case)</td>
-        <td>The distance record stops closing and the premium series publishes and holds.</td>
-        <td>Nothing; fabric, attach and short depreciation schedules stay as priced.</td></tr>
-        <tr><td class="exposure">Low-comm reaches the frontier</td>
-        <td>Criterion 2: a documented 100B+ run over 10 Gb/s links within 1.3x matched compute. The early
-        warning is criterion 3, published communication factors of 5,000x at 10B+.</td>
-        <td>Useful lives and depreciation inside hyperscaler accounts, then networking attach, then the
-        system-versus-merchant mix.</td></tr>
-        <tr><td class="exposure">Evolutionary methods close the sample gap</td>
-        <td>Published parity within 2x samples of a gradient baseline at 10B+ scale, against the 3 to
-        10x published today.</td>
-        <td>Fabric compresses hardest while total compute demand rises; merchant and distributed capacity
-        accrue.</td></tr>
-        <tr><td class="exposure">The rental spread compresses</td>
-        <td>Criterion 1: the rental spread under 5 points for two consecutive quarters.</td>
-        <td>Confirmation rather than warning; by this point the re-rating is under way.</td></tr>
-      </tbody>
-    </table>
-    <p>Communication-reduction factors appear in papers quarters before a frontier-scale run is
-    demonstrated; accounting changes follow within a reporting cycle or two; attach rates and the rental
-    spread move last, because marketplaces price bundles and filings lag decisions. The leading
-    indicators are public: the arXiv record and the useful-life notes in annual filings. The rental
-    spread is a confirming indicator rather than a leading one.</p>
+    <h2 class="eyebrow">The View</h2>
+    <p>Base case, the premium holds. The efficiency cost of low-communication training and the sample
+    cost of evolutionary training are both real, and nothing at frontier scale has been trained without
+    co-located fabric doing most of the work.</p>
+    <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
+    is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
+    in 2025. If it continues to criterion 2, the transmission runs through line items before headlines:
+    useful-life and depreciation notes move first (the Microsoft and Amazon changes above show the
+    mechanism), then networking attach, then the system-versus-merchant mix behind NVIDIA's networking
+    line and Broadcom's switching demand. Papers lead demonstrated runs by quarters, accounting follows
+    within a reporting cycle or two, the rental spread moves last because marketplaces price bundles.
+    The filings and the published runs are known, the sequencing is my inference.</p>
+    <p>The tail is evolutionary parity, the scenario I cannot size. If the sample gap closes the
+    dislocation is larger: compute demand rises while co-location demand falls, and accelerators
+    decouple from fabric. Nothing published points to it, my own results say the penalty is real, and it
+    stays a tail unless the attention gap closes.</p>
   </section>
 
   <section class="note-section">
