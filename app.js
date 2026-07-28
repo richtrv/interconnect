@@ -319,8 +319,9 @@ function initPanel() {
 var RUNS = [
   { x: 2024.50, p: 1.1e9, label: "OPENDILOCO 1.1B", short: "1.1B OPEN", kind: "commodity", link: "internet, 2 continents", dx: 8, dy: -8 },
   { x: 2024.87, p: 10e9, label: "INTELLECT-1 10B", short: "INT-1 10B", kind: "commodity", link: "internet, 3 continents", dx: 8, dy: -8 },
-  { x: 2025.35, p: 32e9, label: "INTELLECT-2 32B, RL", short: "INT-2 32B RL", kind: "commodity", link: "internet, permissionless workers", dx: 8, dy: -8, narrowAlign: "right", narrowDx: -7 },
-  { x: 2026.42, p: 100e9, label: "ORION 100B, PARTIAL", short: "ORION 100B", kind: "commodity", link: "internet, 5 sites, stopped at 1.1B tokens", align: "right", dx: -7, dy: -8, narrowAlign: "right", narrowDx: -7 }
+  { x: 2025.35, p: 32e9, label: "INTELLECT-2 32B, RL", short: "INT-2 32B RL", kind: "commodity", link: "internet, permissionless workers", align: "right", dx: -7, dy: -8, narrowAlign: "right", narrowDx: -7 },
+  { x: 2026.19, p: 72e9, label: "COVENANT 72B", short: "COV 72B", kind: "commodity", link: "internet, permissionless, 1.1T tokens", dx: 8, dy: 16, narrowAlign: "right", narrowDx: -7 },
+  { x: 2026.42, p: 100e9, label: "ORION 100B, PARTIAL", short: "ORION 100B", kind: "commodity", link: "internet, 5 controlled sites, stopped at 1.1B tokens", align: "right", dx: -7, dy: -8, narrowAlign: "right", narrowDx: -7 }
 ];
 var GEMINI = {
   x: 2023.92,
@@ -349,7 +350,7 @@ function buildExhibitC(target) {
     });
   }
 
-  /* frontier reference: largest documented single-campus dense run to date */
+  /* frontier reference: largest disclosed dense run to date */
   var refLine = xs.map(function (x) {
     if (x === 2020.37) return 175e9;
     if (x === 2022.29) return 540e9;
@@ -434,7 +435,7 @@ function buildExhibitC(target) {
         ctx.fillStyle = INK2;
         ctx.textAlign = "right";
         ctx.textBaseline = "bottom";
-        ctx.fillText(narrow ? "DENSE FRONTIER 540B" : "LARGEST SINGLE-CAMPUS DENSE RUN",
+        ctx.fillText(narrow ? "DENSE FRONTIER 540B" : "LARGEST DISCLOSED DENSE RUN",
           u2.bbox.left + u2.bbox.width - px(6), u2.valToPos(540e9, "y", true) - px(6));
         ctx.restore();
       }],
@@ -457,7 +458,7 @@ function buildExhibitC(target) {
         var offX = u2.bbox.left / dpr, offY = u2.bbox.top / dpr;
         tip.innerHTML = best.label + "<br>" +
           (best === GEMINI ? GEMINI.detail : fmtParams(best.p)) +
-          (best.link ? " / " + best.link : " / single campus");
+          (best.link ? " / " + best.link : " / dense frontier reference");
         tip.style.display = "block";
         tip.style.left = Math.min(offX + u2.valToPos(best.x, "x") + 14, u2.width - 240) + "px";
         tip.style.top = best === GEMINI ? Math.max(offY + 18, 0) + "px"

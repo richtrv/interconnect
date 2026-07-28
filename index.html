@@ -58,8 +58,8 @@
     inside one building, and that assumption is a number, 0.8 bytes per second per parameter in the
     unsharded data-parallel case, past a 400 Gb/s port at 62.5B parameters at a 5 second step. Methods
     that need less bandwidth exist at published exchange rates, and the multi-site record over ordinary
-    links moved from 1.1B to 32B parameters in under a year, with a partial 100B demonstration in 2026,
-    against a single-campus frontier of 540B.
+    links moved from 1.1B to a completed 72B in under two years, with a partial 100B demonstration
+    alongside, against a dense frontier of 540B.
     Base case: the premium holds. The scenario worth watching is low-communication training reaching
     frontier scale; the tail, the part I know from my own dissertation, is evolutionary methods closing
     their sample gap. Three pre-registered criteria state what would change the base case, a daily
@@ -92,10 +92,9 @@
     across those 128 GPUs gives approximately 2.1 GB/s of gradient-sync traffic per GPU at the disclosed
     5.9 second step, before tensor-, pipeline- and context-parallel traffic or protocol overhead. Frontier
     runs fit inside buildings in part by buying this additional parallelism and fabric.</p>
-    <p>This is one physical basis of scale-up fabric, co-packaged optics and rack-scale system value. HBM
-    addresses a separate local-memory bottleneck, though it is sold inside many of the same systems. The
-    unsharded bound takes three constants and a division to compute; the sharded case distributes that
-    traffic but introduces other communication.</p>
+    <p>This is one physical basis of scale-up fabric, co-packaged optics and rack-scale system value;
+    HBM addresses a separate local-memory bottleneck, though it is sold inside many of the same
+    systems.</p>
     <div class="chart-wrap">
       <div id="exhibit-a-mini" class="screen-chart" role="img" aria-label="Static rendering of the Bandwidth Wall chart: required per-worker bandwidth against model size for the three method families."></div>
       <img class="print-only" src="assets/exhibit-a.png" alt="The Bandwidth Wall chart, static rendering.">
@@ -128,10 +127,10 @@
     thousand workers with bytes-per-generation communication. Qiu et al., 2025, source 22; MeZO,
     source 23.</span>
     That price is regime-dependent and it is moving: the first full-parameter evolution-strategies
-    fine-tuning of billion-parameter language models, published September 2025, needed under 20 percent
-    of the samples of the reinforcement-learning methods it was compared against, with fewer reward
-    hacks and steadier runs, and forward-pass-only fine-tuning has separately reached 66B parameters on
-    inference-class memory.</p>
+    fine-tuning of billion-parameter language models, published September 2025, outperformed the
+    reinforcement-learning methods it was compared against on reasoning tasks, needing only forward
+    passes, with fewer reward hacks and steadier runs, and zeroth-order fine-tuning has separately
+    reached 66B parameters on inference-class memory.</p>
     <p>My dissertation used these methods, so the sample penalty is something I have measured rather
     than read about. The work ran on a single machine, nothing distributed about it, and against a tuned
     gradient baseline the penalty came out at 4 to 8 times, inside the published range. What makes the
@@ -141,8 +140,8 @@
     research budgets reach, but I suspect part of the gap is research attention rather than method.
     Gradient training has had a decade of optimiser and infrastructure engineering behind it,
     evolutionary methods have not, and nobody has funded the equivalent effort to find where the floor
-    actually is. The September 2025 result above is the first funded attempt, and it moved the number
-    the way I expected. One result, one regime, so still a suspicion rather than a conclusion.</p>
+    actually is. The September 2025 result above is the first funded attempt, and it points the
+    direction I expected. One result, one regime, so still a suspicion rather than a conclusion.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
@@ -151,21 +150,20 @@
 
   <section class="note-section">
     <h2 class="eyebrow">What The Market Says</h2>
-    <p>Rental marketplaces put a public price on the same accelerator in different machines. The spread
-    between whole NVLink nodes and standalone cards is a daily proxy for what the fabric is worth, and
-    only a proxy: machine, host, region and bundle composition move the same number.</p>
-    <p>Methodology v2 uses Vast.ai public H100 SXM 80GB listings and verified rentable asks; whole 8+ GPU
-    NVLink nodes on one side and single-GPU asks on the other; one observation per unique machine, formed
-    as the within-machine median ask per GPU-hour; then the median per side after trimming observations
-    outside 0.5x to 2.0x of the side median. A day is valid only with at least five machines per side.
-    Daily aggregate provenance is stored; individual listings are never republished.</p>
+    <p>Rental marketplaces put a public price on the same accelerator in different machines, and the
+    spread between whole NVLink nodes and standalone cards is a daily proxy for what the fabric is
+    worth, only a proxy, machine, host, region and bundle composition move the same number.</p>
+    <p>Methodology v2 uses Vast.ai public H100 SXM 80GB listings, verified asks only, whole 8+ GPU
+    NVLink nodes against single-GPU asks, one observation per unique machine, a 0.5x to 2.0x trim and a
+    five-machine minimum per side; the full construction sits in the methodology file, and individual
+    listings are never republished.</p>
     <p>The stored pull at 19:46 UTC on 25 July 2026 is the reason the Monitor does not yet chart the
     series: eleven retained standalone asks but only three verified whole-node asks.<sup class="sn-ref">6</sup>
     <span class="sidenote">6. Stored v1 pull, 2026-07-25T19:46:13Z: standalone median $2.88 per GPU-hour,
     n=11; whole 8+ GPU NVLink nodes median $3.09, n=3. The clustered side is below the stated minimum.
     Stored in data/premium.json; v2 begins with subsequent pulls.</span>
-    The series is collecting rather than publishing: the book is not yet deep enough to clear the stated
-    minimum, and days below it are stored as invalid rather than plotted.</p>
+    The series collects until the book clears the stated minimum; thin days are stored as invalid rather
+    than plotted.</p>
   </section>
 
   <section class="note-section">
@@ -177,19 +175,24 @@
     reinforcement-learning post-training, which exchanges far less than pretraining.<sup class="sn-ref">7</sup>
     <span class="sidenote">7. Sources 3, 4, 5. RL post-training moves weights and rollouts occasionally,
     not gradients every step; the 32B point is a weaker claim than the 10B one.</span>
-    In June 2026 an incentivised network of permissionless workers took a 100B dense model onto links
-    with a median upload of 856 Mbps, one previous-generation GPU per peer across five sites, at roughly
-    65 percent of datacentre speed, and stopped after 1.1B tokens for cost.<sup class="sn-ref">8</sup>
-    <span class="sidenote">8. Sources 20 and 21: 16 pipeline stages x 3 replicas, 48 A100s, 30.8 percent
-    average model FLOP utilisation. Engineering feasibility at 100B, not a completed pretraining.</span>
-    That touches criterion 2's scale threshold without meeting it, the run was not completed and the
-    compute penalty sits near 1.5x against the pre-registered 1.3x.</p>
+    In March 2026 Covenant-72B completed roughly 1.1T tokens of pretraining at 72B parameters with open
+    permissionless participation, peers joining and leaving freely.<sup class="sn-ref">8</sup>
+    <span class="sidenote">8. Source 24. SparseLoCo communication-efficient optimiser; reported as
+    competitive with centralised models on similar or higher compute budgets.</span>
+    In June 2026 a controlled deployment across five sites took a 100B dense model onto links with a
+    median upload of 856 Mbps, at roughly 65 percent of the operator's co-located baseline, and stopped
+    after 1.1B tokens for cost.<sup class="sn-ref">9</sup>
+    <span class="sidenote">9. Sources 20 and 21: 16 pipeline stages x 3 replicas, 48 A100s, 30.8 percent
+    average model FLOP utilisation, figures from the operator's own report. Engineering feasibility at
+    100B, not a completed pretraining; permissionless participation is stated as future work.</span>
+    The partial run touches criterion 2's scale threshold without meeting it, the completed one sits 28B
+    below it, and neither carries the documented compute accounting the criterion requires.</p>
     <p>Frontier laboratories also train across datacentres: Gemini was trained across multiple sites on
     private fibre. Owned, provisioned, exclusive links extend the radius of one building without changing
-    its cost of entry, so they carry no evidence about commodity links. The exhibit separates the two
-    records by marker for that reason.</p>
-    <p>The gap is the number to track. In mid 2024 the commodity-link record stood roughly 500 times below
-    the largest documented single-campus dense run, PaLM at 540B. By 2025 the gap was about 17 times.
+    its cost of entry, so they carry no evidence about commodity links.</p>
+    <p>The gap is the number to track. In mid 2024 the commodity-link record stood roughly 500 times
+    below the largest disclosed dense run, PaLM at 540B on two TPU pods over Google's own network. By
+    2025 the gap was about 17 times, and by March 2026, on Covenant's completed run, about 7.5 times.
     Completed runs set the direction; criterion 2 states the crossing that would settle it. Each
     crossing on the way converts standalone fleets from stranded capacity into competing supply, and
     useful-life assumptions register it first.</p>
@@ -201,21 +204,21 @@
     requirement is met, which the filings already show: NVIDIA reported 142 percent growth in Data
     Center networking revenue in fiscal 2026 driven by NVLink fabric, Ethernet and InfiniBand, Broadcom
     attributes its AI semiconductor demand to custom accelerators and Ethernet switching, and Micron
-    reported higher HBM demand from AI data centres.<sup class="sn-ref">9</sup>
-    <span class="sidenote">9. Sources 15 to 17. These disclosures establish demand for the components;
+    reported higher HBM demand from AI data centres.<sup class="sn-ref">10</sup>
+    <span class="sidenote">10. Sources 15 to 17. These disclosures establish demand for the components;
     they do not measure a standalone interconnect premium.</span>
     The costs of the alternatives are real, and capacity behind weaker links cannot hold the 5 second
     step, which is the constraint the premium prices.</p>
     <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
     is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
-    in 2025, a partial 100B in 2026. If it continues to criterion 2 the first effects are accounting
+    in 2025, a completed 72B and a partial 100B in 2026. If it continues to criterion 2 the first effects are accounting
     effects, because standalone and prior-generation fleets re-enter the training pool and earn longer,
     which moves useful-life and depreciation assumptions inside hyperscaler accounts before it moves any
-    headline,<sup class="sn-ref">10</sup>
-    <span class="sidenote">10. Useful-life estimates have moved both ways. Microsoft extended server and
-    network equipment from four to six years in 2022. Amazon extended servers from five to six years in
-    2024, then shortened a subset to five years and accelerated retirements effective in 2025, citing the
-    pace of AI and machine-learning development. Sources 18 and 19.</span>
+    headline,<sup class="sn-ref">11</sup>
+    <span class="sidenote">11. Useful-life estimates have moved both ways. Microsoft extended server and
+    network equipment from four to six years in 2022. Amazon extended servers to six years in 2024, then
+    shortened a subset to five and accelerated retirements from 2025, citing the pace of AI development.
+    Sources 18 and 19.</span>
     and only after that networking attach and the bundle premium of integrated racks, which shifts back
     toward merchant silicon as compute becomes fungible across sites. Papers lead demonstrated runs by
     quarters, accounting follows within a reporting cycle or two, the rental spread moves last because
@@ -224,14 +227,14 @@
     <p>The tail is evolutionary parity, and the tail is where my weighting differs from consensus.
     Structurally these methods fit a permissionless network better than anything else on the curve,
     independent workers exchanging a scalar, free to join and drop, no orchestrator, while the Orion run
-    had to force coupled gradient training into that setting with 128x activation compression and the
+    forced coupled gradient training across sites with a coordinator and 64x activation compression, the
     friction visible in its numbers. What keeps the tail a tail is the sample bill, and the sample bill
     is regime-dependent: heavy where the learning signal is dense, as in pretraining, thin where the
     signal is a scalar reward, which is the regime frontier compute is shifting into as post-training
     and reasoning take a growing share of budgets. The early evidence runs that way, ES fine-tuning
-    beating its RL baselines on samples at billion-parameter scale, forward-pass-only methods reaching
-    66B on inference-class memory, the largest multi-site run before Orion already reinforcement
-    learning. None of that is pretraining and none of it is frontier scale, so I still cannot size the
+    outperforming its RL baselines at billion-parameter scale, forward-pass-only methods reaching
+    66B on inference-class memory, multi-site reinforcement learning already demonstrated at 32B.
+    None of that is pretraining and none of it is frontier scale, so I still cannot size the
     tail. What I can say is the direction: the share of compute suited to these methods is growing, and
     if that continues the premium's anchor narrows to pretraining alone. Nothing here recommends buying
     or selling anything.</p>
@@ -254,7 +257,8 @@
     1.3 times the compute of a matched co-located baseline. Both numbers fixed here, before the fact.</p>
     <p>3. Published, well-documented communication-reduction factors reach 5,000 times synchronous data
     parallelism at 10B parameters or larger: one order of magnitude beyond today's 400 to 500 times.</p>
-    <p>Any trigger produces a written update to this page. The Monitor watches all three daily.</p>
+    <p>Any trigger produces a written update to this page. The collector checks the first daily; the
+    other two are watched by hand.</p>
   </section>
 
   <section class="note-section">
@@ -283,6 +287,7 @@
       <li><span class="n">21</span><span>Macrocosmos, Orion-100B distributed pretraining report, macrocosmos.ai, June 2026.</span></li>
       <li><span class="n">22</span><span>Qiu et al., Evolution Strategies at Scale: LLM Fine-Tuning Beyond Reinforcement Learning, arXiv 2509.24372, 2025.</span></li>
       <li><span class="n">23</span><span>Malladi et al., Fine-Tuning Language Models with Just Forward Passes, arXiv 2305.17333, 2023.</span></li>
+      <li><span class="n">24</span><span>Covenant-72B technical report, arXiv 2603.08163, 2026.</span></li>
     </ol>
   </section>
 

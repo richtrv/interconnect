@@ -459,7 +459,7 @@ ol.sources .n { color: var(--ink-2); flex-shrink: 0; }
 
 @page {
   size: A4;
-  margin: 14mm 15mm;
+  margin: 12mm 14mm;
   @bottom-center { content: counter(page); font-family: monospace; font-size: 10px; }
 }
 
@@ -476,13 +476,14 @@ ol.sources .n { color: var(--ink-2); flex-shrink: 0; }
   .note-section p + p { margin-top: 0.6em; }
   .eyebrow { break-after: avoid; margin-bottom: 6pt; }
   .chart-wrap { break-inside: avoid; }
-  ol.sources { columns: 2; column-gap: 24pt; }
+  ol.sources { columns: 3; column-gap: 16pt; }
   table.scenario th, table.scenario td { font-size: 8pt; padding: 4pt 8pt 4pt 0; }
   ol.sources li { padding: 2pt 0; font-size: 7.5pt; break-inside: avoid; }
   .sidenote { float: none; width: auto; margin: 2pt 0; display: block; border-left: 1pt solid #000000; padding-left: 8pt; font-size: 7.5pt; }
-  #footnotes { margin-top: 8pt; }
-  #footnotes li { margin-top: 0; }
-  .note-section { margin-top: 12pt; }
+  #footnotes { margin-top: 6pt; }
+  #footnotes ol { columns: 2; column-gap: 16pt; }
+  #footnotes li { margin-top: 0; break-inside: avoid; }
+  .note-section { margin-top: 10pt; }
   footer.site { margin-top: 16pt; padding-bottom: 0; }
   .eyebrow, .caption, .source-line, .sidenote, ol.sources li { color: #000000; }
 }

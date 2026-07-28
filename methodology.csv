@@ -23,17 +23,18 @@ crossovers,lowcomm_exits_home_fibre,78,billion parameters,computed,DiLoCo-class 
 crossovers,lowcomm_exits_wan_leased,781,billion parameters,computed,DiLoCo-class methods hold 10 Gb/s links to 781B
 sanity,intellect1_implied_bandwidth,128,megabits per second at 10B,computed vs arXiv 2412.01152,model predicts 10B low-comm training fits consumer links; INTELLECT-1 trained 10B across 3 continents
 sanity,llama_3_405b_sharded_gradient_sync,2.1,GB/s per GPU,computed from arXiv 2407.21783,405B x 2 bytes x ring factor 2 / (TP8 x PP16 x 5.9 seconds); gradient sync only; excludes tensor pipeline context traffic and overhead
-sanity,orion_compute_penalty,1.5,x datacentre compute,derived from Macrocosmos Orion-100B report (65 percent of datacentre speed),outside criterion 2 threshold of 1.3x; run also not completed so criterion 2 does not fire
-method_evidence,es_llm_fine_tuning,under 20 percent of RL-baseline samples,billion-parameter scale,arXiv 2509.24372,first full-parameter ES fine-tuning of LLMs; scalar-reward regime; fewer reward hacks; not pretraining
+sanity,orion_compute_penalty,1.5,x co-located compute,derived from Macrocosmos Orion-100B report (65 percent of the operator's co-located baseline; self-reported),outside criterion 2 threshold of 1.3x; run also not completed so criterion 2 does not fire
+method_evidence,es_llm_fine_tuning,outperforms PPO and GRPO on reasoning fine-tuning,billion-parameter scale,arXiv 2509.24372,first full-parameter ES fine-tuning of LLMs; forward passes only; steadier runs and fewer reward hacks; scalar-reward regime; not pretraining
 method_evidence,zeroth_order_fine_tuning,66,billion parameters max demonstrated,arXiv 2305.17333,MeZO fine-tunes with forward passes only on inference-class memory; up to 12x memory reduction
 exhibit_c,opendiloco,1.1,billion parameters,arXiv 2407.07852,2024-07; commodity links across 2 continents; solid marker
 exhibit_c,intellect_1,10,billion parameters,arXiv 2412.01152,2024-11; commodity links across 3 continents; solid marker
 exhibit_c,intellect_2,32,billion parameters,arXiv 2505.07291,2025-05; RL post-training over commodity links; solid marker
-exhibit_c,orion_100b,100,billion parameters (partial),arXiv 2507.17766 and Macrocosmos Orion-100B report,2026-06; incentivised permissionless workers; 48 A100 across 5 sites; median upload 856 Mbps; stopped at 1.1B tokens for cost; solid marker labelled PARTIAL
+exhibit_c,covenant_72b,72,billion parameters,arXiv 2603.08163,2026-03; completed pretraining on roughly 1.1T tokens; open permissionless participation with peers joining and leaving freely; SparseLoCo optimiser; solid marker
+exhibit_c,orion_100b,100,billion parameters (partial),arXiv 2507.17766 and Macrocosmos Orion-100B report,2026-06; controlled deployment with permissionless participation stated as future work; 48 A100 across 5 sites; median upload 856 Mbps; 64x activation compression; stopped at 1.1B tokens for cost; solid marker labelled PARTIAL
 exhibit_c,gemini_1_ultra,not disclosed,parameters,arXiv 2312.11805,2023-12; multiple datacentres on private fibre; non-quantitative hollow top-rail marker; not evidence for commodity links
-exhibit_c_reference,gpt_3,175,billion parameters,arXiv 2005.14165,2020-05; single-campus frontier reference
-exhibit_c_reference,palm,540,billion parameters,arXiv 2204.02311,2022-04; single-campus frontier reference
-exhibit_c_reference,llama_3_405b,405,billion parameters,arXiv 2407.21783,2024-07; single-campus frontier reference
+exhibit_c_reference,gpt_3,175,billion parameters,arXiv 2005.14165,2020-05; dense frontier reference
+exhibit_c_reference,palm,540,billion parameters,arXiv 2204.02311,2022-04; dense frontier reference
+exhibit_c_reference,llama_3_405b,405,billion parameters,arXiv 2407.21783,2024-07; dense frontier reference
 comm_reduction,diloco,500,x versus synchronous data-parallel,arXiv 2311.08105,baseline for kill criterion 3
 comm_reduction,intellect_1,400,x versus synchronous data-parallel,arXiv 2412.01152,int8 pseudo-gradients with local steps
 comm_reduction,streaming_diloco,400,x versus synchronous data-parallel,arXiv 2501.18512,overlapped sync with 4-bit quantisation
