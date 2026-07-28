@@ -466,7 +466,7 @@ ol.sources .n { color: var(--ink-2); flex-shrink: 0; }
 @media print {
   html, body { background: #FFFFFF; color: #000000; padding-top: 0; }
   .strip, nav.site, footer.site, .no-print { display: none !important; }
-  body { font-size: 9pt; line-height: 1.4; }
+  body { font-size: 8.5pt; line-height: 1.38; }
   .masthead { padding-top: 0; padding-bottom: 10pt; }
   .masthead h1 { font-size: 20pt; }
   a { color: #000000; text-decoration: none; }
@@ -481,7 +481,7 @@ ol.sources .n { color: var(--ink-2); flex-shrink: 0; }
   ol.sources li { padding: 2pt 0; font-size: 7.5pt; break-inside: avoid; }
   .sidenote { float: none; width: auto; margin: 2pt 0; display: block; border-left: 1pt solid #000000; padding-left: 8pt; font-size: 7.5pt; }
   #footnotes { margin-top: 6pt; }
-  #footnotes ol { columns: 2; column-gap: 16pt; }
+  #footnotes ol { columns: 3; column-gap: 16pt; }
   #footnotes li { margin-top: 0; break-inside: avoid; }
   .note-section { margin-top: 10pt; }
   footer.site { margin-top: 16pt; padding-bottom: 0; }

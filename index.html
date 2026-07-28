@@ -183,8 +183,8 @@
     median upload of 856 Mbps, at roughly 65 percent of the operator's co-located baseline, and stopped
     after 1.1B tokens for cost.<sup class="sn-ref">9</sup>
     <span class="sidenote">9. Sources 20 and 21: 16 pipeline stages x 3 replicas, 48 A100s, 30.8 percent
-    average model FLOP utilisation, figures from the operator's own report. Engineering feasibility at
-    100B, not a completed pretraining; permissionless participation is stated as future work.</span>
+    MFU, figures the operator's own. Feasibility at 100B, not a completed pretraining; permissionless is
+    stated future work.</span>
     The partial run touches criterion 2's scale threshold without meeting it, the completed one sits 28B
     below it, and neither carries the documented compute accounting the criterion requires.</p>
     <p>Frontier laboratories also train across datacentres: Gemini was trained across multiple sites on
@@ -193,6 +193,11 @@
     <p>The gap is the number to track. In mid 2024 the commodity-link record stood roughly 500 times
     below the largest disclosed dense run, PaLM at 540B on two TPU pods over Google's own network. By
     2025 the gap was about 17 times, and by March 2026, on Covenant's completed run, about 7.5 times.
+    The dense benchmark is conservative: disclosed mixture-of-experts training reached 1.04T total
+    parameters on 15.5T tokens in 2025, and a mixture model's gradients cover its total parameters, not
+    its active ones, so the distance to centralised practice is wider than the dense line
+    shows.<sup class="sn-ref">12</sup>
+    <span class="sidenote">12. Kimi K2, source 25: 1.04T total, 32B active.</span>
     Completed runs set the direction; criterion 2 states the crossing that would settle it. Each
     crossing on the way converts standalone fleets from stranded capacity into competing supply, and
     useful-life assumptions register it first.</p>
@@ -288,6 +293,7 @@
       <li><span class="n">22</span><span>Qiu et al., Evolution Strategies at Scale: LLM Fine-Tuning Beyond Reinforcement Learning, arXiv 2509.24372, 2025.</span></li>
       <li><span class="n">23</span><span>Malladi et al., Fine-Tuning Language Models with Just Forward Passes, arXiv 2305.17333, 2023.</span></li>
       <li><span class="n">24</span><span>Covenant-72B technical report, arXiv 2603.08163, 2026.</span></li>
+      <li><span class="n">25</span><span>Kimi Team, Kimi K2: Open Agentic Intelligence, arXiv 2507.20534, 2025.</span></li>
     </ol>
   </section>
 

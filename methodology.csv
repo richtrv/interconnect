@@ -35,6 +35,7 @@ exhibit_c,gemini_1_ultra,not disclosed,parameters,arXiv 2312.11805,2023-12; mult
 exhibit_c_reference,gpt_3,175,billion parameters,arXiv 2005.14165,2020-05; dense frontier reference
 exhibit_c_reference,palm,540,billion parameters,arXiv 2204.02311,2022-04; dense frontier reference
 exhibit_c_reference,llama_3_405b,405,billion parameters,arXiv 2407.21783,2024-07; dense frontier reference
+exhibit_c_reference,kimi_k2_moe_context,1040,billion total parameters (32B active),arXiv 2507.20534,2025-07; mixture-of-experts; not plotted because the reference line is dense runs only; gradients cover total parameters so the dense benchmark is conservative
 comm_reduction,diloco,500,x versus synchronous data-parallel,arXiv 2311.08105,baseline for kill criterion 3
 comm_reduction,intellect_1,400,x versus synchronous data-parallel,arXiv 2412.01152,int8 pseudo-gradients with local steps
 comm_reduction,streaming_diloco,400,x versus synchronous data-parallel,arXiv 2501.18512,overlapped sync with 4-bit quantisation
