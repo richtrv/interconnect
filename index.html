@@ -111,7 +111,7 @@
     exists to serve it, which is another way of saying the premium is priced off this one method.</p>
     <p>Low-communication gradient methods run hundreds of optimiser steps locally and synchronise
     compressed pseudo-gradients at long intervals. DiLoCo demonstrated 500 local steps at a modest quality
-    cost; the INTELLECT runs carried the recipe to real distance, training 10B parameters across three
+    cost; the INTELLECT runs then applied it at distance, training 10B parameters across three
     continents with roughly 400 times less communication than synchronous data parallelism.<sup class="sn-ref">4</sup>
     <span class="sidenote">4. DiLoCo, source 1; Streaming DiLoCo adds overlap and 4-bit quantisation,
     source 2; INTELLECT-1 technical report, source 4.</span>
@@ -229,14 +229,14 @@
     marketplaces price bundles. In sector terms the first losers are switching and optics attach, the
     first winners merchant accelerators and owners of standalone or prior-generation fleets, with power
     and campus developers repricing later as siting pressure eases; HBM re-rates rather than breaks,
-    because per-chip memory demand survives the location question. The filings and the published runs
+    because per-chip memory demand does not depend on where training happens. The filings and the published runs
     are known, the sequencing and the sector order are my inference.</p>
     <p>The tail is evolutionary parity, and the tail is where my weighting differs from consensus.
     Structurally these methods fit a permissionless network better than anything else on the curve,
     independent workers exchanging a scalar, free to join and drop, no orchestrator, while the Orion run
     forced coupled gradient training across sites with a coordinator and 64x activation compression, the
-    friction visible in its numbers. What keeps the tail a tail is the sample bill, and the sample bill
-    is regime-dependent: heavy where the learning signal is dense, as in pretraining, thin where the
+    overhead visible in its numbers. What keeps the tail a tail is the sample cost, and that cost is
+    regime-dependent: large where the learning signal is dense, as in pretraining, small where the
     signal is a scalar reward, which is the regime frontier compute is shifting into as post-training
     and reasoning take a growing share of budgets. The early evidence runs that way, ES fine-tuning
     outperforming its RL baselines at billion-parameter scale, forward-pass-only methods reaching
@@ -245,8 +245,8 @@
     tail. What I can say is the direction: the share of compute suited to these methods is growing, and
     the divergence in that state is the widest of the three, total accelerator and memory demand rising
     while everything priced on adjacency, fabric, optics attach, integrated racks, the campus itself,
-    compresses, with distributed capacity and marketplaces on the other side. If that continues, the
-    premium's anchor narrows to pretraining alone.</p>
+    compresses, with distributed capacity and marketplaces on the other side. If that continues,
+    pretraining is the only workload left paying the premium.</p>
   </section>
 
   <section class="note-section">
@@ -268,9 +268,9 @@
     parallelism at 10B parameters or larger: one order of magnitude beyond today's 400 to 500 times.</p>
     <p>Any trigger produces a written update to this page. The collector checks the first daily; the
     other two are watched by hand.</p>
-    <p>The premium is priced for permanence. The record above moves against it at a measurable rate, the
-    sample and efficiency costs still hold the line, and the criteria are where the difference will show
-    first.</p>
+    <p>The premium is priced as if the assumption were permanent. The record above moves against it at a
+    measurable rate, the sample and efficiency costs have not moved, and the criteria are where the
+    difference will show first.</p>
   </section>
 
   <section class="note-section">
