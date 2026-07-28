@@ -16,7 +16,7 @@ var C = {
   dilocoLocalSteps: 500,     /* DiLoCo H */
   evoPopulation: 1024,       /* constructed ES scenario; see methodology.csv */
   evoBytesPerMember: 8,      /* one scalar return per worker */
-  refAsOf: "2026-07-25"      /* date the reference constants were last checked */
+  refAsOf: "2026-07-28"      /* date the reference constants were last checked */
 };
 
 /* link classes, cheapest first: [key, bytes per second, band label, short label, verdict] */
@@ -319,7 +319,8 @@ function initPanel() {
 var RUNS = [
   { x: 2024.50, p: 1.1e9, label: "OPENDILOCO 1.1B", short: "1.1B OPEN", kind: "commodity", link: "internet, 2 continents", dx: 8, dy: -8 },
   { x: 2024.87, p: 10e9, label: "INTELLECT-1 10B", short: "INT-1 10B", kind: "commodity", link: "internet, 3 continents", dx: 8, dy: -8 },
-  { x: 2025.35, p: 32e9, label: "INTELLECT-2 32B, RL", short: "INT-2 32B RL", kind: "commodity", link: "internet, permissionless workers", dx: 8, dy: -8, narrowAlign: "right", narrowDx: -7 }
+  { x: 2025.35, p: 32e9, label: "INTELLECT-2 32B, RL", short: "INT-2 32B RL", kind: "commodity", link: "internet, permissionless workers", dx: 8, dy: -8, narrowAlign: "right", narrowDx: -7 },
+  { x: 2026.42, p: 100e9, label: "ORION 100B, PARTIAL", short: "ORION 100B", kind: "commodity", link: "internet, 5 sites, stopped at 1.1B tokens", align: "right", dx: -7, dy: -8, narrowAlign: "right", narrowDx: -7 }
 ];
 var GEMINI = {
   x: 2023.92,
@@ -336,7 +337,7 @@ var REFS = [
 function buildExhibitC(target) {
   var xsSet = {};
   RUNS.concat(REFS).forEach(function (r) { xsSet[r.x] = true; });
-  [2019.9, 2026.6].forEach(function (x) { xsSet[x] = true; });
+  [2019.9, 2026.9].forEach(function (x) { xsSet[x] = true; });
   var xs = Object.keys(xsSet).map(Number).sort(function (a, b) { return a - b; });
 
   function col(pred, val) {
@@ -352,7 +353,7 @@ function buildExhibitC(target) {
   var refLine = xs.map(function (x) {
     if (x === 2020.37) return 175e9;
     if (x === 2022.29) return 540e9;
-    if (x === 2026.6) return 540e9;
+    if (x === 2026.9) return 540e9;
     return null;
   });
 
@@ -372,7 +373,7 @@ function buildExhibitC(target) {
     legend: { show: false },
     cursor: { y: false, points: { show: false }, drag: { x: false, y: false } },
     scales: {
-      x: { time: false, range: [2019.9, 2026.6] },
+      x: { time: false, range: [2019.9, 2026.9] },
       y: { distr: 3, log: 10, range: [5e8, 5e12] }
     },
     series: [
@@ -405,7 +406,7 @@ function buildExhibitC(target) {
         RUNS.concat(REFS).forEach(function (r) {
           var x = u2.valToPos(r.x, "x", true), y = u2.valToPos(r.p, "y", true);
           ctx.fillStyle = r.kind === "commodity" ? BLUE : INK2;
-          ctx.textAlign = narrow && r.narrowAlign ? r.narrowAlign : "left";
+          ctx.textAlign = (narrow && r.narrowAlign) || r.align || "left";
           ctx.textBaseline = r.dy < 0 ? "bottom" : "top";
           ctx.fillText(narrow ? r.short : r.label,
             x + px(narrow && r.narrowDx != null ? r.narrowDx : r.dx), y + px(r.dy));

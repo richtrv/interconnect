@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Interconnect Premium | Richard Trevor</title>
-<meta name="description" content="What AI hardware pricing assumes about where training lives: the all-reduce arithmetic, the method spectrum, the multi-site record and pre-registered kill criteria. As of 2026-07-25.">
+<meta name="description" content="What AI hardware pricing assumes about where training lives: the all-reduce arithmetic, the method spectrum, the multi-site record and pre-registered kill criteria. As of 2026-07-28.">
 <meta property="og:title" content="The Interconnect Premium">
 <meta property="og:description" content="Under an unsharded data-parallel assumption, synchronous gradient training exits a 400 Gb/s port at 62.5B parameters. The full argument, caveats and pre-registered kill criteria.">
 <meta property="og:type" content="article">
@@ -28,7 +28,7 @@
 <div class="strip">
   <div class="container">
     <span><span class="k">BANDWIDTH WALL</span> <span class="headline-v" id="strip-headline">62.5B</span></span>
-    <span id="strip-date"><span class="k">DATA THROUGH</span> <span class="v">2026-07-25</span></span>
+    <span id="strip-date"><span class="k">DATA THROUGH</span> <span class="v">2026-07-28</span></span>
     <span class="who hide-m"><span class="v">RICHARD TREVOR</span> <span class="k">/</span> <a href="mailto:richardgt2001@gmail.com">richardgt2001@gmail.com</a></span>
   </div>
 </div>
@@ -40,7 +40,7 @@
       <div>WRITE-UP</div>
       <div class="name">RICHARD TREVOR</div>
       <div><a href="mailto:richardgt2001@gmail.com">richardgt2001@gmail.com</a></div>
-      <div>2026-07-25</div>
+      <div>2026-07-28</div>
     </div>
   </div>
   <nav class="site">
@@ -58,7 +58,8 @@
     inside one building, and that assumption is a number, 0.8 bytes per second per parameter in the
     unsharded data-parallel case, past a 400 Gb/s port at 62.5B parameters at a 5 second step. Methods
     that need less bandwidth exist at published exchange rates, and the multi-site record over ordinary
-    links moved from 1.1B to 32B parameters in under a year against a single-campus frontier of 540B.
+    links moved from 1.1B to 32B parameters in under a year, with a partial 100B demonstration in 2026,
+    against a single-campus frontier of 540B.
     Base case: the premium holds. The scenario worth watching is low-communication training reaching
     frontier scale; the tail, the part I know from my own dissertation, is evolutionary methods closing
     their sample gap. Three pre-registered criteria state what would change the base case, a daily
@@ -101,7 +102,7 @@
     </div>
     <div class="source-line">Same constants as the Monitor's Exhibit A. Evolutionary line: constructed
     scenario of 1,024 workers x 8 bytes every 5 seconds. Assumptions in methodology.csv. Data through
-    2026-07-25.</div>
+    2026-07-28.</div>
   </section>
 
   <section class="note-section">
@@ -124,7 +125,13 @@
     data of a gradient baseline, measured on reinforcement-learning tasks rather than language
     pretraining.<sup class="sn-ref">5</sup>
     <span class="sidenote">5. Salimans et al., 2017, source 6: evolution strategies scaled to over a
-    thousand workers with bytes-per-generation communication.</span></p>
+    thousand workers with bytes-per-generation communication. Qiu et al., 2025, source 22; MeZO,
+    source 23.</span>
+    That price is regime-dependent and it is moving: the first full-parameter evolution-strategies
+    fine-tuning of billion-parameter language models, published September 2025, needed under 20 percent
+    of the samples of the reinforcement-learning methods it was compared against, with fewer reward
+    hacks and steadier runs, and forward-pass-only fine-tuning has separately reached 66B parameters on
+    inference-class memory.</p>
     <p>My dissertation used these methods, so the sample penalty is something I have measured rather
     than read about. The work ran on a single machine, nothing distributed about it, and against a tuned
     gradient baseline the penalty came out at 4 to 8 times, inside the published range. What makes the
@@ -134,7 +141,8 @@
     research budgets reach, but I suspect part of the gap is research attention rather than method.
     Gradient training has had a decade of optimiser and infrastructure engineering behind it,
     evolutionary methods have not, and nobody has funded the equivalent effort to find where the floor
-    actually is. That is a suspicion, not a result.</p>
+    actually is. The September 2025 result above is the first funded attempt, and it moved the number
+    the way I expected. One result, one regime, so still a suspicion rather than a conclusion.</p>
     <p>The three families sit on one curve, and the gradient world has spent two years descending it,
     cutting its bandwidth requirement by two and a half orders of magnitude for a few points of
     efficiency. The premium prices the assumption that the descent stops here; the distance record below
@@ -168,16 +176,23 @@
     need only about 128 Mb/s per worker, and INTELLECT-2 ran 32B in 2025, though as
     reinforcement-learning post-training, which exchanges far less than pretraining.<sup class="sn-ref">7</sup>
     <span class="sidenote">7. Sources 3, 4, 5. RL post-training moves weights and rollouts occasionally,
-    not gradients every step; the 32B point is a weaker claim than the 10B one.</span></p>
+    not gradients every step; the 32B point is a weaker claim than the 10B one.</span>
+    In June 2026 an incentivised network of permissionless workers took a 100B dense model onto links
+    with a median upload of 856 Mbps, one previous-generation GPU per peer across five sites, at roughly
+    65 percent of datacentre speed, and stopped after 1.1B tokens for cost.<sup class="sn-ref">8</sup>
+    <span class="sidenote">8. Sources 20 and 21: 16 pipeline stages x 3 replicas, 48 A100s, 30.8 percent
+    average model FLOP utilisation. Engineering feasibility at 100B, not a completed pretraining.</span>
+    That touches criterion 2's scale threshold without meeting it, the run was not completed and the
+    compute penalty sits near 1.5x against the pre-registered 1.3x.</p>
     <p>Frontier laboratories also train across datacentres: Gemini was trained across multiple sites on
     private fibre. Owned, provisioned, exclusive links extend the radius of one building without changing
     its cost of entry, so they carry no evidence about commodity links. The exhibit separates the two
     records by marker for that reason.</p>
     <p>The gap is the number to track. In mid 2024 the commodity-link record stood roughly 500 times below
     the largest documented single-campus dense run, PaLM at 540B. By 2025 the gap was about 17 times.
-    Two data points set a direction; criterion 2 states the crossing that would settle it. Each crossing
-    on the way converts standalone fleets from stranded capacity into competing supply, and useful-life
-    assumptions register it first.</p>
+    Completed runs set the direction; criterion 2 states the crossing that would settle it. Each
+    crossing on the way converts standalone fleets from stranded capacity into competing supply, and
+    useful-life assumptions register it first.</p>
   </section>
 
   <section class="note-section">
@@ -186,17 +201,18 @@
     requirement is met, which the filings already show: NVIDIA reported 142 percent growth in Data
     Center networking revenue in fiscal 2026 driven by NVLink fabric, Ethernet and InfiniBand, Broadcom
     attributes its AI semiconductor demand to custom accelerators and Ethernet switching, and Micron
-    reported higher HBM demand from AI data centres.<sup class="sn-ref">8</sup>
-    <span class="sidenote">8. Sources 15 to 17. These disclosures establish demand for the components;
+    reported higher HBM demand from AI data centres.<sup class="sn-ref">9</sup>
+    <span class="sidenote">9. Sources 15 to 17. These disclosures establish demand for the components;
     they do not measure a standalone interconnect premium.</span>
     The costs of the alternatives are real, and capacity behind weaker links cannot hold the 5 second
     step, which is the constraint the premium prices.</p>
     <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
     is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
-    in 2025. If it continues to criterion 2 the first effects are accounting effects, because standalone
-    and prior-generation fleets re-enter the training pool and earn longer, which moves useful-life and
-    depreciation assumptions inside hyperscaler accounts before it moves any headline,<sup class="sn-ref">9</sup>
-    <span class="sidenote">9. Useful-life estimates have moved both ways. Microsoft extended server and
+    in 2025, a partial 100B in 2026. If it continues to criterion 2 the first effects are accounting
+    effects, because standalone and prior-generation fleets re-enter the training pool and earn longer,
+    which moves useful-life and depreciation assumptions inside hyperscaler accounts before it moves any
+    headline,<sup class="sn-ref">10</sup>
+    <span class="sidenote">10. Useful-life estimates have moved both ways. Microsoft extended server and
     network equipment from four to six years in 2022. Amazon extended servers from five to six years in
     2024, then shortened a subset to five years and accelerated retirements effective in 2025, citing the
     pace of AI and machine-learning development. Sources 18 and 19.</span>
@@ -205,11 +221,20 @@
     quarters, accounting follows within a reporting cycle or two, the rental spread moves last because
     marketplaces price bundles. The filings and the published runs are known, the sequencing is my
     inference.</p>
-    <p>The tail is evolutionary parity, the scenario I cannot size. If the sample gap closes the
-    dislocation is larger: compute demand rises while co-location demand falls, and accelerators
-    decouple from fabric. Nothing published points to it, my own results say the penalty is real, and it
-    stays a tail unless the attention gap closes. Nothing here recommends buying or selling
-    anything.</p>
+    <p>The tail is evolutionary parity, and the tail is where my weighting differs from consensus.
+    Structurally these methods fit a permissionless network better than anything else on the curve,
+    independent workers exchanging a scalar, free to join and drop, no orchestrator, while the Orion run
+    had to force coupled gradient training into that setting with 128x activation compression and the
+    friction visible in its numbers. What keeps the tail a tail is the sample bill, and the sample bill
+    is regime-dependent: heavy where the learning signal is dense, as in pretraining, thin where the
+    signal is a scalar reward, which is the regime frontier compute is shifting into as post-training
+    and reasoning take a growing share of budgets. The early evidence runs that way, ES fine-tuning
+    beating its RL baselines on samples at billion-parameter scale, forward-pass-only methods reaching
+    66B on inference-class memory, the largest multi-site run before Orion already reinforcement
+    learning. None of that is pretraining and none of it is frontier scale, so I still cannot size the
+    tail. What I can say is the direction: the share of compute suited to these methods is growing, and
+    if that continues the premium's anchor narrows to pretraining alone. Nothing here recommends buying
+    or selling anything.</p>
   </section>
 
   <section class="note-section">
@@ -254,6 +279,10 @@
       <li><span class="n">17</span><span>Micron, fiscal 2025 Form 10-K: AI data-centre demand for HBM, SEC filing 0000723125-25-000028.</span></li>
       <li><span class="n">18</span><span>Microsoft, fiscal 2024 Form 10-K: 2022 extension of server and network equipment useful lives from four to six years, SEC filing 0000950170-24-087843.</span></li>
       <li><span class="n">19</span><span>Amazon, fiscal 2024 Form 10-K: server useful-life changes and accelerated depreciation tied to AI and machine-learning development, SEC filing 0001018724-25-000004.</span></li>
+      <li><span class="n">20</span><span>Macrocosmos, IOTA: Incentivised Orchestrated Training Architecture, technical primer, arXiv 2507.17766, 2025.</span></li>
+      <li><span class="n">21</span><span>Macrocosmos, Orion-100B distributed pretraining report, macrocosmos.ai, June 2026.</span></li>
+      <li><span class="n">22</span><span>Qiu et al., Evolution Strategies at Scale: LLM Fine-Tuning Beyond Reinforcement Learning, arXiv 2509.24372, 2025.</span></li>
+      <li><span class="n">23</span><span>Malladi et al., Fine-Tuning Language Models with Just Forward Passes, arXiv 2305.17333, 2023.</span></li>
     </ol>
   </section>
 
