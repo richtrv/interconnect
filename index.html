@@ -72,8 +72,8 @@
     on its shard of the batch, and the fleet averages those gradients before the next step. The averaging
     is an all-reduce, and a bandwidth-optimal ring all-reduce moves close to twice the size of the
     exchanged buffer through each worker, every step.<sup class="sn-ref">1</sup>
-    <span class="sidenote">1. Ring all-reduce moves 2(N-1)/N of the buffer per worker (Patarasuk and Yuan,
-    2009). The factor is taken as 2 throughout; source 14.</span></p>
+    <span class="sidenote">1. Ring all-reduce moves 2(N-1)/N of the buffer per worker; taken as 2
+    throughout. Patarasuk and Yuan, source 14.</span></p>
     <p>Worked once, at 70B parameters: gradients in bf16 are 2 bytes per parameter, a 140 GB buffer, the
     ring moves twice that through each worker, 280 GB per step, and frontier runs step every few seconds,
     the stated target here being 5.<sup class="sn-ref">2</sup>
@@ -84,9 +84,9 @@
     networking. The general form is required bandwidth = 0.8 bytes per second per parameter, and the
     illustrative crossings follow: consumer fibre by 160M parameters, campus ethernet by 15.6B, a
     400 Gb/s port by 62.5B, and an NVLink-class link by 1.1T.<sup class="sn-ref">3</sup>
-    <span class="sidenote">3. A worker in Exhibit A is one data-parallel rank holding a full replica.
-    Payload efficiency and protocol overhead are omitted. Sharding and overlap change per-device
-    traffic; see the comparison below and source 9.</span></p>
+    <span class="sidenote">3. A worker in Exhibit A is one data-parallel rank holding a full replica;
+    payload efficiency and protocol overhead are omitted. Sharding changes per-device traffic; see
+    below and source 9.</span></p>
     <p>The bound is not a per-NIC estimate for a sharded frontier run: Llama 3 405B ran tensor
     parallelism of 8 and pipeline parallelism of 16, and dividing the same gradient payload across those
     128 GPUs gives roughly 2.1 GB/s per GPU at the disclosed 5.9 second step, before tensor-, pipeline-
@@ -108,7 +108,7 @@
     <h2 class="eyebrow">The Method Spectrum</h2>
     <p>Synchronous gradient training is the efficiency baseline: best use of every sample, full exchange
     every step, communication scaling with model size. Everything above the 100 Gb/s band in the exhibit
-    exists to serve it, which is another way of saying the premium is priced off this one method.</p>
+    exists to serve it; the premium is priced off this one method.</p>
     <p>Low-communication gradient methods run hundreds of optimiser steps locally and synchronise
     compressed pseudo-gradients at long intervals. DiLoCo demonstrated 500 local steps at a modest quality
     cost; the INTELLECT runs then applied it at distance, training 10B parameters across three
@@ -118,14 +118,13 @@
     The exchange rate is explicit, orders of magnitude less bandwidth for a few points of efficiency
     and more total compute at equal loss, and fabric pricing power rests on it: every order of magnitude
     conceded moves training capacity from inside the building to outside it.</p>
-    <p>Evolutionary and population-based methods hold the far end of the curve. Workers perturb parameters
+    <p>Evolutionary and population-based methods sit at the far end of the curve. Workers perturb parameters
     under shared random seeds, evaluate, and exchange scalar fitness values: a few bytes per worker per
     generation, independent of model size. The published price is sample inefficiency, 3 to 10 times the
     data of a gradient baseline, measured on reinforcement-learning tasks rather than language
     pretraining.<sup class="sn-ref">5</sup>
-    <span class="sidenote">5. Salimans et al., 2017, source 6: evolution strategies scaled to over a
-    thousand workers with bytes-per-generation communication. Qiu et al., 2025, source 22; MeZO,
-    source 23.</span>
+    <span class="sidenote">5. Salimans et al., source 6: ES scaled past a thousand workers on bytes per
+    generation. Qiu et al., source 22; MeZO, source 23.</span>
     That price is regime-dependent and it is moving: the first full-parameter evolution-strategies
     fine-tuning of billion-parameter language models, published September 2025, outperformed the
     reinforcement-learning methods it was compared against on reasoning tasks, needing only forward
@@ -171,12 +170,12 @@
     2024, INTELLECT-1 took 10B across three continents that November on links the arithmetic above says
     need only about 128 Mb/s per worker, and INTELLECT-2 ran 32B in 2025, though as
     reinforcement-learning post-training, which exchanges far less than pretraining.<sup class="sn-ref">7</sup>
-    <span class="sidenote">7. Sources 3, 4, 5. RL post-training moves weights and rollouts occasionally,
-    not gradients every step; the 32B point is a weaker claim than the 10B one.</span>
+    <span class="sidenote">7. Sources 3, 4, 5. RL post-training moves weights and rollouts, not
+    gradients every step; the 32B point is a weaker claim than the 10B.</span>
     In March 2026 Covenant-72B completed roughly 1.1T tokens of pretraining at 72B parameters with open
     permissionless participation, peers joining and leaving freely.<sup class="sn-ref">8</sup>
-    <span class="sidenote">8. Source 24. SparseLoCo communication-efficient optimiser; reported as
-    competitive with centralised models on similar or higher compute budgets.</span>
+    <span class="sidenote">8. Source 24. SparseLoCo optimiser; reported competitive with centralised
+    models at similar or higher compute.</span>
     In June 2026 a controlled deployment across five sites took a 100B dense model onto links with a
     median upload of 856 Mbps, at roughly 65 percent of the operator's co-located baseline, and stopped
     after 1.1B tokens for cost.<sup class="sn-ref">9</sup>
@@ -221,8 +220,7 @@
     which moves useful-life and depreciation assumptions inside hyperscaler accounts before it moves any
     headline,<sup class="sn-ref">11</sup>
     <span class="sidenote">11. Microsoft extended server lives from four to six years in 2022; Amazon to
-    six in 2024, then shortened a subset to five with accelerated retirements from 2025, citing AI.
-    Sources 18 and 19.</span>
+    six in 2024, then cut a subset to five from 2025, citing AI. Sources 18 and 19.</span>
     and only after that networking attach and the bundle premium of integrated racks, which shifts back
     toward merchant silicon as compute becomes fungible across sites. Papers lead demonstrated runs by
     quarters, accounting follows within a reporting cycle or two, the rental spread moves last because
