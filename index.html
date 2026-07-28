@@ -87,11 +87,11 @@
     <span class="sidenote">3. A worker in Exhibit A is one data-parallel rank holding a full replica.
     Payload efficiency and protocol overhead are omitted. Sharding and overlap change per-device
     traffic; see the comparison below and source 9.</span></p>
-    <p>The bound is not a per-NIC estimate for a sharded frontier run. Meta's disclosed Llama 3 405B
-    layout used tensor parallelism of 8 and pipeline parallelism of 16. Dividing the same gradient payload
-    across those 128 GPUs gives approximately 2.1 GB/s of gradient-sync traffic per GPU at the disclosed
-    5.9 second step, before tensor-, pipeline- and context-parallel traffic or protocol overhead. Frontier
-    runs fit inside buildings in part by buying this additional parallelism and fabric.</p>
+    <p>The bound is not a per-NIC estimate for a sharded frontier run: Llama 3 405B ran tensor
+    parallelism of 8 and pipeline parallelism of 16, and dividing the same gradient payload across those
+    128 GPUs gives roughly 2.1 GB/s per GPU at the disclosed 5.9 second step, before tensor-, pipeline-
+    and context-parallel traffic. Frontier runs fit inside buildings in part by buying this additional
+    parallelism and fabric.</p>
     <p>This is one physical basis of scale-up fabric, co-packaged optics and rack-scale system value;
     HBM addresses a separate local-memory bottleneck, though it is sold inside many of the same
     systems.</p>
@@ -115,9 +115,9 @@
     continents with roughly 400 times less communication than synchronous data parallelism.<sup class="sn-ref">4</sup>
     <span class="sidenote">4. DiLoCo, source 1; Streaming DiLoCo adds overlap and 4-bit quantisation,
     source 2; INTELLECT-1 technical report, source 4.</span>
-    The exchange rate is explicit: orders of magnitude less bandwidth, a few points of efficiency, more
-    total compute for equal loss. Fabric pricing power rests on that exchange rate: every order of
-    magnitude conceded moves training capacity from inside the building to outside it.</p>
+    The exchange rate is explicit, orders of magnitude less bandwidth for a few points of efficiency
+    and more total compute at equal loss, and fabric pricing power rests on it: every order of magnitude
+    conceded moves training capacity from inside the building to outside it.</p>
     <p>Evolutionary and population-based methods hold the far end of the curve. Workers perturb parameters
     under shared random seeds, evaluate, and exchange scalar fitness values: a few bytes per worker per
     generation, independent of model size. The published price is sample inefficiency, 3 to 10 times the
@@ -159,11 +159,9 @@
     listings are never republished.</p>
     <p>The stored pull at 19:46 UTC on 25 July 2026 is the reason the Monitor does not yet chart the
     series: eleven retained standalone asks but only three verified whole-node asks.<sup class="sn-ref">6</sup>
-    <span class="sidenote">6. Stored v1 pull, 2026-07-25T19:46:13Z: standalone median $2.88 per GPU-hour,
-    n=11; whole 8+ GPU NVLink nodes median $3.09, n=3. The clustered side is below the stated minimum.
-    Stored in data/premium.json; v2 begins with subsequent pulls.</span>
-    The series collects until the book clears the stated minimum; thin days are stored as invalid rather
-    than plotted.</p>
+    <span class="sidenote">6. Stored v1 pull, 2026-07-25T19:46:13Z: standalone median $2.88, n=11; whole
+    nodes $3.09, n=3, below the minimum. In data/premium.json; v2 begins with later pulls.</span>
+    The series collects until the book clears the stated minimum.</p>
   </section>
 
   <section class="note-section">
@@ -210,25 +208,29 @@
     Center networking revenue in fiscal 2026 driven by NVLink fabric, Ethernet and InfiniBand, Broadcom
     attributes its AI semiconductor demand to custom accelerators and Ethernet switching, and Micron
     reported higher HBM demand from AI data centres.<sup class="sn-ref">10</sup>
-    <span class="sidenote">10. Sources 15 to 17. These disclosures establish demand for the components;
-    they do not measure a standalone interconnect premium.</span>
+    <span class="sidenote">10. Sources 15 to 17: component demand, not a standalone interconnect
+    premium.</span>
     The costs of the alternatives are real, and capacity behind weaker links cannot hold the 5 second
-    step, which is the constraint the premium prices.</p>
+    step, which is the constraint the premium prices. The exposure map under that state is the familiar
+    one: fabric, switching and optics attach accrue, HBM alongside, integrated racks over merchant
+    boards, and capacity outside the fabric prices at a discount to its compute.</p>
     <p>The live scenario is low-communication training reaching frontier scale, because that trajectory
     is funded and public: 500 local steps demonstrated in 2023, 10B across three continents in 2024, 32B
     in 2025, a completed 72B and a partial 100B in 2026. If it continues to criterion 2 the first effects are accounting
     effects, because standalone and prior-generation fleets re-enter the training pool and earn longer,
     which moves useful-life and depreciation assumptions inside hyperscaler accounts before it moves any
     headline,<sup class="sn-ref">11</sup>
-    <span class="sidenote">11. Useful-life estimates have moved both ways. Microsoft extended server and
-    network equipment from four to six years in 2022. Amazon extended servers to six years in 2024, then
-    shortened a subset to five and accelerated retirements from 2025, citing the pace of AI development.
+    <span class="sidenote">11. Microsoft extended server lives from four to six years in 2022; Amazon to
+    six in 2024, then shortened a subset to five with accelerated retirements from 2025, citing AI.
     Sources 18 and 19.</span>
     and only after that networking attach and the bundle premium of integrated racks, which shifts back
     toward merchant silicon as compute becomes fungible across sites. Papers lead demonstrated runs by
     quarters, accounting follows within a reporting cycle or two, the rental spread moves last because
-    marketplaces price bundles. The filings and the published runs are known, the sequencing is my
-    inference.</p>
+    marketplaces price bundles. In sector terms the first losers are switching and optics attach, the
+    first winners merchant accelerators and owners of standalone or prior-generation fleets, with power
+    and campus developers repricing later as siting pressure eases; HBM re-rates rather than breaks,
+    because per-chip memory demand survives the location question. The filings and the published runs
+    are known, the sequencing and the sector order are my inference.</p>
     <p>The tail is evolutionary parity, and the tail is where my weighting differs from consensus.
     Structurally these methods fit a permissionless network better than anything else on the curve,
     independent workers exchanging a scalar, free to join and drop, no orchestrator, while the Orion run
@@ -241,8 +243,10 @@
     66B on inference-class memory, multi-site reinforcement learning already demonstrated at 32B.
     None of that is pretraining and none of it is frontier scale, so I still cannot size the
     tail. What I can say is the direction: the share of compute suited to these methods is growing, and
-    if that continues the premium's anchor narrows to pretraining alone. Nothing here recommends buying
-    or selling anything.</p>
+    the divergence in that state is the widest of the three, total accelerator and memory demand rising
+    while everything priced on adjacency, fabric, optics attach, integrated racks, the campus itself,
+    compresses, with distributed capacity and marketplaces on the other side. If that continues, the
+    premium's anchor narrows to pretraining alone.</p>
   </section>
 
   <section class="note-section">
@@ -251,7 +255,7 @@
     regional mix, so it is a proxy tracked consistently under a published filter rather than a clean
     price, and the bandwidth exhibit assumes stated precisions, step times and synchronisation schemes,
     where different choices shift the lines by constant factors without changing the ordering of the
-    three families or the existence of the wall.</p>
+    three families or the existence of the wall. Nothing here recommends buying or selling anything.</p>
   </section>
 
   <section class="note-section">
@@ -264,6 +268,9 @@
     parallelism at 10B parameters or larger: one order of magnitude beyond today's 400 to 500 times.</p>
     <p>Any trigger produces a written update to this page. The collector checks the first daily; the
     other two are watched by hand.</p>
+    <p>The premium is priced for permanence. The record above moves against it at a measurable rate, the
+    sample and efficiency costs still hold the line, and the criteria are where the difference will show
+    first.</p>
   </section>
 
   <section class="note-section">
