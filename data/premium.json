@@ -7,7 +7,7 @@
   "trim": "machine observations outside 0.5x to 2.0x of side median dropped",
   "min_count_per_side": 5,
   "collection_began": "2026-07-25",
-  "last_pull_utc": "2026-08-12T06:40:36Z"
+  "last_pull_utc": "2026-08-13T06:42:57Z"
  },
  "days": [
   {
@@ -398,6 +398,27 @@
     "query_limit": 1000
    },
    "reason": "below minimum count: clustered_n 0"
+  },
+  {
+   "date": "2026-08-13",
+   "methodology_version": "v2",
+   "standalone_median": 3.1496,
+   "clustered_median": 3.6016,
+   "standalone_n": 6,
+   "clustered_n": 1,
+   "spread_pct": null,
+   "valid": false,
+   "provenance": {
+    "raw_offer_n": 29,
+    "schema_valid_offer_n": 29,
+    "usable_offer_n": 17,
+    "standalone_offer_n": 7,
+    "clustered_offer_n": 1,
+    "standalone_machine_n_pretrim": 7,
+    "clustered_machine_n_pretrim": 1,
+    "query_limit": 1000
+   },
+   "reason": "below minimum count: clustered_n 1"
   }
  ]
 }
